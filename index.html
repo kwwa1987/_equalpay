@@ -1,0 +1,2893 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="여자라서 떼인 돈">
+<meta name="theme-color" content="#1a0a2e">
+<meta name="format-detection" content="telephone=no">
+<title>여자라서 떼인 돈, 알려드립니다!</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pur: #9d3bf2;
+  --pur2: #7a1fd4;
+  --pur3: #c98af7;
+  --pur4: #f0e4ff;
+  --pur5: #f8f2ff;
+  --blk: #1a0a2e;
+  --wht: #ffffff;
+  --blue: #185FA5;
+  --blue2: #2d7dd2;
+  --blue3: #E6F1FB;
+  --px: 'Press Start 2P', 'Noto Sans KR', monospace; /* 픽셀 폰트 — 영문/숫자 라벨에만 사용 */
+  --kr: 'Noto Sans KR', sans-serif;                   /* 한글 본문 / 버튼 기본 */
+  --red: #e74c3c;
+  --grn: #27ae60;
+  --gold: #ffd54f;      /* 강조 포인트 (1년 누적, 핵심 숫자) */
+  --gold2: #ffb300;     /* 골드 진한 톤 */
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--pur5); font-family: var(--kr); color: var(--blk);
+  overflow-x: hidden; max-width: 100vw;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+button, input, textarea, select {
+  -webkit-appearance: none;
+  appearance: none;
+  font-family: inherit;
+}
+a, button { touch-action: manipulation; }
+.postit-grid, .admin-table-wrap { -webkit-overflow-scrolling: touch; }
+
+/* ══════════════════════════════
+   NAV
+══════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: var(--blk);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; height: 62px;
+  border-bottom: 3px solid var(--pur);
+}
+.nav-logo { text-decoration: none; display: flex; align-items: center; height: 100%; }
+.nav-logo-kr { font-family: var(--kr); font-size: 15px; font-weight: 900; color: #fff; line-height: 1.4; display: flex; align-items: center; }
+.nav-logo-tag {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--px); font-size: 9px; color: var(--gold);
+  border: 1px solid var(--gold); padding: 3px 6px;
+  margin-right: 8px;
+  letter-spacing: .1em;
+  height: 20px;
+  vertical-align: middle;
+  line-height: 1;
+}
+.nav-links { display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
+.nav-links a {
+  font-family: var(--kr); font-size: 14px; font-weight: 700; color: #fff;
+  text-decoration: none; transition: all .2s; white-space: nowrap; line-height: 1.4;
+  background: rgba(157,59,242,.25);
+  border: 1.5px solid rgba(157,59,242,.5);
+  border-radius: 6px;
+  padding: 8px 16px;
+  display: inline-flex; align-items: center; justify-content: center; text-align: center;
+}
+.nav-links a:hover { background: var(--pur); border-color: var(--pur); color: #fff; transform: translateY(-1px); }
+.nav-cta {
+  font-family: var(--px); font-size: 10px; background: var(--pur); color: #fff;
+  border: none; padding: 10px 16px; cursor: pointer; border-radius: 4px;
+  text-decoration: none; line-height: 1; white-space: nowrap;
+}
+.nav-cta:hover { background: var(--pur2); }
+
+/* ══════════════════════════════
+   HOST BANNER (슬림 - nav와 중복 피함)
+══════════════════════════════ */
+.host-banner {
+  background: #0f061e;
+  border-bottom: 1px solid rgba(157,59,242,.25);
+  padding: 8px 28px;
+  margin-top: 62px;
+}
+.host-sub-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; flex-wrap: wrap;
+}
+.host-sub-prefix {
+  font-family: var(--kr); font-size: 11px; font-weight: 700;
+  color: #5a4a7a; letter-spacing: .1em; text-transform: uppercase;
+}
+.host-org-tag {
+  font-family: var(--kr); font-size: 12px; font-weight: 700; color: var(--pur3);
+  background: rgba(157,59,242,.1); border: 1px solid rgba(157,59,242,.22);
+  border-radius: 4px; padding: 3px 10px; white-space: nowrap;
+}
+
+/* ══════════════════════════════
+   TICKER
+══════════════════════════════ */
+.ticker { background: var(--pur); padding: 12px 0; overflow: hidden; white-space: nowrap; }
+.ticker-inner {
+  display: inline-block; animation: ticker 18s linear infinite;
+  font-family: var(--kr); font-size: 14px; font-weight: 700; color: #fff; letter-spacing: .04em;
+}
+@keyframes ticker { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
+
+/* ══════════════════════════════
+   INTRO SCREENS  (fullscreen sliding pages)
+══════════════════════════════ */
+#intro-wrapper {
+  position: relative; width: 100%; overflow: hidden;
+}
+.intro-slide {
+  display: none;
+  min-height: 100vh;
+  align-items: center; justify-content: center;
+  padding: 32px 20px 40px;
+  flex-direction: column;
+}
+.intro-slide.active { display: flex; animation: slideIn .4s ease; }
+@keyframes slideIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── Intro 스킵 링크 (우상단) ── */
+.intro-skip {
+  position: absolute; top: 16px; right: 20px; z-index: 5;
+  background: transparent; color: var(--pur2);
+  border: 1.5px solid rgba(157,59,242,.4);
+  border-radius: 999px; padding: 6px 14px;
+  font-family: var(--kr); font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: background .2s, border-color .2s;
+}
+.intro-skip:hover { background: rgba(157,59,242,.1); border-color: var(--pur); }
+.intro-slide { position: relative; }
+
+/* ── Slide 1: 여자라서 떼인 돈 ── */
+#slide-1 {
+  background: linear-gradient(160deg, #dce9ff 0%, #eee6ff 50%, #f8f2ff 100%);
+}
+.slide1-window {
+  background: #fff;
+  border: 2px solid var(--blk);
+  border-radius: 20px;
+  max-width: 680px; width: 100%;
+  box-shadow: 8px 8px 0 rgba(157,59,242,.25);
+  position: relative;
+  overflow: visible;
+}
+.slide1-window > .window-titlebar { border-radius: 18px 18px 0 0; overflow: hidden; }
+.slide1-window > .slide1-body { border-radius: 0 0 18px 18px; overflow: hidden; }
+
+/* 슬라이드 1: 동전 데코 */
+.slide1-coin {
+  position: absolute; width: 54px; height: 54px;
+  filter: drop-shadow(2px 2px 0 rgba(0,0,0,.15));
+  z-index: 4; animation: coinFloat 3.5s ease-in-out infinite;
+}
+.slide1-coin.coin-a { bottom: 36px; left: -18px; transform: rotate(-12deg); animation-delay: 0s; }
+.slide1-coin.coin-b { top: 56px; left: -28px; width: 38px; height: 38px; transform: rotate(15deg); animation-delay: 1.4s; opacity: .85; }
+@keyframes coinFloat {
+  0%,100% { transform: translateY(0) rotate(-12deg); }
+  50% { transform: translateY(-8px) rotate(-8deg); }
+}
+.window-titlebar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1.5px solid #e0e0e0;
+  background: #f5f5f5;
+}
+.window-dots { display: flex; gap: 7px; }
+.dot { width: 14px; height: 14px; border-radius: 50%; }
+.dot-r { background: #ff5f57; }
+.dot-y { background: #ffbd2e; }
+.dot-g { background: #28ca41; }
+.window-close {
+  width: 24px; height: 24px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border: none;
+  font-family: var(--kr); font-size: 18px; color: #999;
+  line-height: 1; cursor: pointer; padding: 0;
+  border-radius: 4px; transition: background .2s, color .2s;
+}
+.window-close:hover { background: rgba(231,76,60,.15); color: var(--red); }
+.slide1-body { padding: 40px 44px 48px; text-align: center; }
+.slide1-title {
+  font-family: var(--kr); font-size: clamp(22px,4vw,36px); font-weight: 900;
+  color: var(--pur); line-height: 1.7; margin-bottom: 24px;
+}
+.slide1-subtitle {
+  font-family: var(--kr); font-size: clamp(18px,3vw,26px); font-weight: 700;
+  color: var(--blk); line-height: 1.5; margin-bottom: 12px;
+}
+.slide1-desc {
+  font-family: var(--kr); font-size: clamp(14px,2vw,18px);
+  color: #555; line-height: 1.8; margin-bottom: 36px;
+}
+.slide1-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--pur); color: #fff; border: 2px solid var(--pur);
+  border-radius: 50px; padding: 16px 36px;
+  font-family: var(--kr); font-size: 18px; font-weight: 900;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+  box-shadow: 3px 3px 0 rgba(157,59,242,.3);
+  line-height: 1;
+}
+.slide1-btn:hover { background: var(--pur2); border-color: var(--pur2); color: #fff; transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(157,59,242,.35); }
+.slide1-btn .arrow { font-size: 20px; }
+
+/* ── Slide 2: 성별임금격차 ── */
+#slide-2 {
+  background: linear-gradient(160deg, #f8f2ff 0%, #fff 60%);
+}
+.slide2-window {
+  background: #fff;
+  border: 2px solid var(--blk);
+  border-radius: 20px;
+  max-width: 860px; width: 100%;
+  box-shadow: 8px 8px 0 rgba(157,59,242,.25);
+  overflow: visible;
+}
+.slide2-body { padding: 24px 32px 28px; }
+.slide2-eyebrow {
+  font-family: var(--kr); font-size: 13px; font-weight: 900;
+  color: var(--pur2); text-align: center;
+  letter-spacing: .1em; margin-bottom: 12px;
+}
+.slide2-title {
+  font-family: var(--kr); font-size: clamp(28px,5vw,48px); font-weight: 900;
+  color: var(--blk); margin-bottom: 32px; text-align: center;
+  line-height: 1.2;
+}
+.gap-num {
+  color: var(--red);
+  display: inline-block; transform: skewX(-4deg);
+  text-shadow: 3px 3px 0 rgba(231,76,60,.18);
+}
+.slide2-content { display: flex; align-items: center; gap: 36px; flex-wrap: wrap; justify-content: center; }
+.chart-area { display: flex; flex-direction: column; align-items: center; gap: 14px; position: relative; width: 100%; }
+.wage-clock { width: 220px; height: 220px; flex-shrink: 0; }
+.clock-caption { text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; width: 100%; justify-content: center; }
+.caption-pill {
+  display: inline-block;
+  font-family: var(--kr); font-size: 12px; font-weight: 900;
+  color: #fff; background: var(--blk);
+  padding: 5px 12px; border-radius: 999px;
+  letter-spacing: .02em;
+}
+.caption-big {
+  font-family: var(--kr); font-size: 22px; font-weight: 900;
+  color: var(--red); letter-spacing: -.01em;
+}
+.slide2-text { max-width: 320px; min-width: 240px; }
+.slide2-text-main {
+  font-family: var(--kr); font-size: clamp(15px,2.2vw,18px);
+  color: #333; line-height: 1.9; margin-bottom: 16px; word-break: keep-all;
+}
+.slide2-text-main strong { font-weight: 900; color: var(--blk); }
+.slide2-text-main .text-accent { color: var(--pur2); }
+.slide2-text-main .text-red { color: var(--red); background: rgba(231,76,60,.1); padding: 1px 6px; border-radius: 4px; }
+.slide2-enter-btn {
+  display: block; width: 100%; text-align: center;
+  background: var(--pur); color: #fff;
+  border: 2px solid var(--pur); border-radius: 8px;
+  padding: 20px 32px; margin-top: 12px;
+  font-family: var(--kr); font-size: 19px; font-weight: 900;
+  letter-spacing: .02em; line-height: 1.4;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+  box-shadow: 3px 3px 0 rgba(157,59,242,.3);
+}
+.slide2-enter-btn:hover { background: var(--pur2); border-color: var(--pur2); transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(157,59,242,.35); }
+
+/* ══════════════════════════════
+   MAIN SITE (hidden until entered)
+══════════════════════════════ */
+#main-site { display: none; }
+#main-site.show { display: block; }
+
+/* CALCULATOR */
+.calc-section-wrap { padding: 64px 16px 0; background: var(--pur5); }
+.calc-heading-wrap { max-width: 1100px; margin: 0 auto 36px; width: 100%; overflow: hidden; }
+.section-tag { font-family: var(--px); font-size: 10px; color: var(--pur); display: inline-block; border: 1px solid var(--pur); padding: 6px 14px; border-radius: 20px; margin-bottom: 12px; letter-spacing: .08em; }
+.section-title { font-family: var(--kr); font-size: clamp(24px,3vw,34px); font-weight: 900; color: var(--blk); line-height: 1.3; word-break: keep-all; overflow-wrap: break-word; }
+.section-desc { font-size: 17px; color: #6a5a8a; margin-top: 10px; line-height: 1.7; word-break: keep-all; }
+
+.calc-card { background:#fff; border-radius:24px; max-width:980px; margin:0 auto; box-shadow: 0 4px 48px rgba(157,59,242,.12); overflow:hidden; width: 100%; }
+.divider-pixel { height: 4px; background: repeating-linear-gradient(90deg, var(--pur) 0, var(--pur) 8px, transparent 8px, transparent 14px); }
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+@media(max-width:680px){ .calc-grid { grid-template-columns: 1fr; } }
+.input-panel { padding: 40px; min-width: 0; }
+.result-panel { padding: 40px 40px 40px 0; display: flex; flex-direction: column; justify-content: center; border-left: 1px solid var(--pur4); min-width: 0; }
+@media(max-width:680px){ .result-panel { padding: 24px; border-left: none; border-top: 1px solid var(--pur4); } }
+
+.panel-label { font-family: var(--kr); font-size: 16px; font-weight: 900; color: var(--pur); margin-bottom: 22px; line-height: 1.6; word-break: keep-all; }
+.field { margin-bottom: 22px; }
+.field label { display: block; font-family: var(--kr); font-size: 18px; font-weight: 900; color: var(--blk); margin-bottom: 10px; line-height: 1.6; word-break: keep-all; }
+.field-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.field input {
+  flex: 1; min-width: 0; height: 58px; border: 2px solid #e0d0f5; border-radius: 8px;
+  padding: 0 16px; font-size: 22px; font-family: var(--kr); font-weight: 700;
+  color: var(--blk); background: var(--pur5); outline: none; transition: border-color .2s, box-shadow .2s;
+  -webkit-appearance: none; appearance: none;
+}
+.field input:focus { border-color: var(--pur); box-shadow: 0 0 0 3px rgba(157,59,242,.12); }
+.unit { font-family: var(--px); font-size: 14px; color: var(--pur); white-space: nowrap; flex-shrink: 0; }
+.hint { font-family: var(--kr); font-size: 15px; color: #a090c0; margin-top: 7px; word-break: keep-all; }
+.err { font-family: var(--px); font-size: 11px; color: var(--red); display: none; margin-top: 7px; line-height: 1.8; word-break: break-all; }
+
+.formula-box { background: var(--pur5); border: 1px solid var(--pur4); border-radius: 10px; padding: 16px 18px; margin-bottom: 22px; overflow: hidden; }
+.formula-title { font-family: var(--kr); font-size: 13px; font-weight: 900; color: var(--pur2); margin-bottom: 12px; line-height: 1.5; letter-spacing: .04em; word-break: keep-all; }
+.formula-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--pur4); gap: 8px; }
+.formula-row:last-child { border-bottom: none; }
+.formula-lbl { font-family: var(--kr); font-size: 16px; font-weight: 700; color: #7a5fa0; flex-shrink: 0; }
+.formula-val { font-family: var(--kr); font-size: 14px; font-weight: 700; color: var(--pur2); line-height: 1.5; text-align: right; word-break: keep-all; min-width: 0; }
+
+.calc-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; height: 60px;
+  background: var(--pur); color: #fff;
+  border: 2px solid var(--pur); border-radius: 8px;
+  font-family: var(--kr); font-size: 17px; font-weight: 900;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+  box-shadow: 3px 3px 0 rgba(157,59,242,.3);
+  line-height: 1; letter-spacing: .02em;
+}
+.calc-btn:hover { background: var(--pur2); border-color: var(--pur2); transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(157,59,242,.35); }
+.calc-btn:active { transform: translate(0,0); box-shadow: 1px 1px 0 rgba(157,59,242,.3); }
+.calc-btn:disabled { background: #c9b8e8; border-color: #c9b8e8; cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 rgba(157,59,242,.15); }
+
+.result-empty { display: flex; align-items: center; justify-content: center; height: 100%; text-align: center; color: #b0a0cc; padding: 40px; }
+.result-empty p { font-family: var(--kr); font-size: 15px; font-weight: 700; line-height: 1.8; }
+.rboxes { display: none; }
+.rboxes.show { display: block; animation: fu .3s ease; }
+@keyframes fu { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.rbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.rbox { background: var(--pur5); border: 1px solid var(--pur4); border-radius: 10px; padding: 14px; }
+.rbox.big {
+  grid-column: 1/-1;
+  background: linear-gradient(135deg, var(--pur2) 0%, var(--pur) 100%);
+  border: 2px solid var(--pur2);
+  padding: 22px 20px;
+  box-shadow: 4px 4px 0 rgba(157,59,242,.25);
+  position: relative;
+  margin-top: 6px;
+}
+.rbox.big::before {
+  content: '⚡ KEY RESULT';
+  position: absolute; top: -10px; left: 16px;
+  background: var(--gold); color: var(--blk);
+  padding: 3px 10px; border-radius: 4px;
+  font-family: var(--px); font-size: 9px;
+  letter-spacing: .1em;
+  box-shadow: 2px 2px 0 rgba(0,0,0,.15);
+}
+.rbox-lbl { font-family: var(--kr); font-size: 13px; font-weight: 700; color: var(--pur2); margin-bottom: 8px; line-height: 1.4; letter-spacing: .02em; }
+.rbox.big .rbox-lbl { color: #fff; font-size: 14px; font-weight: 900; margin-top: 4px; }
+.rbox-val { font-family: var(--kr); font-size: 20px; font-weight: 900; color: var(--blk); line-height: 1.3; letter-spacing: -.01em; }
+.rbox.big .rbox-val {
+  font-size: 32px; color: var(--gold);
+  text-shadow: 2px 2px 0 rgba(0,0,0,.25);
+  letter-spacing: -.02em;
+}
+.rbox-sub { font-family: var(--kr); font-size: 12px; font-weight: 400; color: #a080c0; margin-top: 4px; }
+.rbox.big .rbox-sub { color: rgba(255,255,255,.7); font-size: 13px; }
+
+.submit-area { display: none; }
+.submit-area.show { display: block; }
+.submit-note { font-size: 15px; color: #7a5fa0; line-height: 1.7; padding: 10px 14px; background: var(--pur5); border-left: 3px solid var(--pur); border-radius: 0 6px 6px 0; margin-bottom: 12px; }
+.success-banner {
+  display: none;
+  background: linear-gradient(135deg, #d6f5dc 0%, #e8fce8 100%);
+  border: 2px solid var(--grn);
+  border-radius: 10px; padding: 14px 16px;
+  margin-top: 10px;
+  box-shadow: 3px 3px 0 rgba(39,174,96,.2);
+}
+.success-banner.show { display: block; animation: fu .3s ease; }
+.success-banner-title {
+  font-family: var(--kr); font-size: 14px; font-weight: 900;
+  color: #1e7e3a; margin-bottom: 6px; letter-spacing: .02em;
+}
+.success-banner-body {
+  font-family: var(--kr); font-size: 13px; font-weight: 400;
+  color: #2c5f3d; line-height: 1.6;
+}
+.success-banner-body strong { font-weight: 900; color: #1e7e3a; }
+.action-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.action-btn-dash {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; height: 60px;
+  background: var(--blk); color: var(--pur3);
+  border: 2px solid var(--blk); border-radius: 8px;
+  font-family: var(--kr); font-size: 16px; font-weight: 900;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.2);
+  line-height: 1; letter-spacing: .02em;
+}
+.action-btn-dash:hover { background: #2a1a4e; border-color: #2a1a4e; transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(0,0,0,.28); }
+
+.action-btn-board {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; height: 60px;
+  background: #fff; color: var(--pur2);
+  border: 2px solid var(--pur); border-radius: 8px;
+  font-family: var(--kr); font-size: 16px; font-weight: 900;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+  box-shadow: 3px 3px 0 rgba(157,59,242,.18);
+  line-height: 1; letter-spacing: .02em;
+}
+.action-btn-board:hover { background: var(--pur5); transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(157,59,242,.25); }
+
+.ghost-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; height: 48px;
+  background: transparent; color: var(--pur);
+  border: 1.5px solid var(--pur4); border-radius: 8px;
+  font-family: var(--kr); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: background .2s, border-color .2s, color .2s;
+  margin-top: 10px;
+  line-height: 1;
+}
+.ghost-btn:hover { background: var(--pur5); border-color: var(--pur); color: var(--pur2); }
+
+/* DASHBOARD */
+#dashboard { background: var(--blk); }
+.section { padding: 72px 32px; max-width: 1100px; margin: 0 auto; }
+.dash-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 32px; }
+@media(max-width:640px){ .dash-grid { grid-template-columns: 1fr; } }
+.stat-card { background: rgba(157,59,242,.1); border: 1px solid rgba(157,59,242,.25); border-radius: 12px; padding: 22px; text-align: center; }
+.stat-num { font-family: var(--kr); font-size: 22px; font-weight: 900; color: var(--pur3); margin-bottom: 8px; line-height: 1.3; }
+.stat-lbl { font-family: var(--kr); font-size: 14px; font-weight: 700; color: #9d8ac0; }
+.chart-section { margin-bottom: 32px; }
+.chart-title { font-family: var(--kr); font-size: 14px; font-weight: 900; color: var(--pur3); margin-bottom: 16px; line-height: 1.4; letter-spacing: .02em; }
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.bar-lbl { font-family: var(--kr); font-size: 13px; font-weight: 700; color: #7a5fa0; width: 90px; text-align: right; flex-shrink: 0; line-height: 1.4; }
+.bar-track { flex: 1; height: 28px; background: rgba(157,59,242,.1); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--pur); border-radius: 4px; transition: width .5s ease; }
+.bar-cnt { font-family: var(--px); font-size: 11px; color: var(--pur3); width: 28px; flex-shrink: 0; line-height: 1.4; }
+.recent-title { font-family: var(--kr); font-size: 14px; font-weight: 900; color: var(--pur3); margin-bottom: 14px; line-height: 1.4; letter-spacing: .02em; }
+.entries { max-height: 220px; overflow-y: auto; }
+.entry { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid rgba(157,59,242,.15); }
+.entry:last-child { border-bottom: none; }
+.entry-val { font-family: var(--kr); font-size: 13px; font-weight: 700; color: var(--pur3); line-height: 1.4; }
+.entry-time { font-family: var(--px); font-size: 10px; color: #5a4a7a; line-height: 1.4; }
+/* 대시보드 숫자/표기 가독성 개선 */
+#dashboard .stat-num,
+#dashboard .bar-lbl,
+#dashboard .bar-cnt,
+#dashboard .entry-val,
+#dashboard .entry-time { color: #fff !important; }
+
+.dash-loading { font-family: var(--px); font-size: 13px; color: #5a4a7a; padding: 2rem; text-align: center; line-height: 2; letter-spacing: .1em; }
+.dash-empty { font-family: var(--kr); font-size: 15px; font-weight: 700; color: #5a4a7a; padding: 3rem; text-align: center; line-height: 1.8; word-break: keep-all; }
+.refresh-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 92px; height: 36px; padding: 0 14px;
+  background: transparent; color: var(--pur3);
+  border: 1.5px solid rgba(157,59,242,.3); border-radius: 6px;
+  font-family: var(--kr); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background .2s, border-color .2s;
+  line-height: 1; white-space: nowrap;
+}
+.refresh-btn:hover { background: rgba(157,59,242,.15); border-color: var(--pur); }
+.dash-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
+
+/* BOARD */
+#board { background: #fff; overflow-x: hidden; }
+.postit-form { background: var(--pur5); border: 2px solid var(--pur4); border-radius: 16px; padding: 30px; margin-bottom: 48px; max-width: 700px; width: 100%; overflow: hidden; }
+.postit-form-title { font-family: var(--kr); font-size: 15px; font-weight: 900; color: var(--pur2); margin-bottom: 20px; line-height: 1.5; word-break: keep-all; }
+.nick-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; min-width: 0; }
+.nick-label { font-family: var(--kr); font-size: 14px; font-weight: 700; color: var(--pur2); white-space: nowrap; flex-shrink: 0; }
+.nick-input { flex: 1; min-width: 0; height: 48px; border: 2px solid var(--pur4); border-radius: 8px; padding: 0 16px; font-family: var(--kr); font-size: 16px; font-weight: 700; color: var(--blk); background: #fff; outline: none; transition: border-color .2s; -webkit-appearance: none; appearance: none; }
+.nick-input:focus { border-color: var(--pur); box-shadow: 0 0 0 3px rgba(157,59,242,.1); }
+textarea#voice { width: 100%; height: 115px; border: 2px solid var(--pur4); border-radius: 8px; padding: 14px; font-family: var(--kr); font-size: 16px; color: var(--blk); background: #fff; outline: none; resize: vertical; transition: border-color .2s; line-height: 1.6; -webkit-appearance: none; appearance: none; box-sizing: border-box; }
+textarea#voice:focus { border-color: var(--pur); box-shadow: 0 0 0 3px rgba(157,59,242,.1); }
+.form-footer { display: flex; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; min-width: 0; }
+.char-count { font-family: var(--kr); font-size: 13px; font-weight: 400; color: #a090c0; flex: 1; min-width: 0; word-break: keep-all; }
+.post-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 48px; padding: 0 22px;
+  background: var(--pur); color: #fff;
+  border: 2px solid var(--pur); border-radius: 8px;
+  font-family: var(--kr); font-size: 15px; font-weight: 900;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+  box-shadow: 3px 3px 0 rgba(157,59,242,.3);
+  line-height: 1; flex-shrink: 0; white-space: nowrap;
+}
+.post-btn:hover { background: var(--pur2); border-color: var(--pur2); transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(157,59,242,.35); }
+.post-btn:disabled { background: #c9b8e8; border-color: #c9b8e8; cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 rgba(157,59,242,.15); }
+.post-err { font-family: var(--kr); font-size: 13px; font-weight: 700; color: var(--red); display: none; margin-top: 10px; line-height: 1.5; word-break: keep-all; }
+.post-ok { font-family: var(--kr); font-size: 13px; font-weight: 700; color: var(--grn); display: none; margin-top: 10px; line-height: 1.5; word-break: keep-all; }
+.postit-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 20px; width: 100%; }
+.postit { background: #fff9a0; border-radius: 2px; padding: 20px 16px 34px; min-height: 160px; box-shadow: 3px 3px 8px rgba(0,0,0,.12); position: relative; font-family: var(--kr); font-size: 15px; line-height: 1.65; color: #333; transition: transform .2s, box-shadow .2s; word-break: break-word; overflow: hidden; }
+.postit:hover { transform: rotate(0deg) scale(1.03) translateY(-3px); box-shadow: 5px 6px 16px rgba(0,0,0,.16); }
+.postit:nth-child(3n)   { background: #ffd6d6; transform: rotate(-1.2deg); }
+.postit:nth-child(3n):hover { transform: rotate(0deg) scale(1.03) translateY(-3px); }
+.postit:nth-child(3n+2) { background: #d6f0ff; transform: rotate(1deg); }
+.postit:nth-child(3n+2):hover { transform: rotate(0deg) scale(1.03) translateY(-3px); }
+.postit:nth-child(5n) { background: #d6ffd9; transform: rotate(-0.5deg); }
+.postit:nth-child(7n) { background: #f0d6ff; transform: rotate(1.5deg); }
+.postit::before { content:''; display:block; width:42px; height:13px; background:rgba(0,0,0,.12); margin:-20px auto 14px; border-radius:1px; }
+.postit-nick { display:block; font-weight:900; font-size:12px; color:#555; margin-bottom:6px; word-break:break-word; }
+.postit-text { display:block; word-break:break-word; }
+.postit-time { position:absolute; bottom:9px; right:12px; font-family:var(--px); font-size:10px; color:rgba(0,0,0,.35); letter-spacing:.04em; }
+.postit-empty { grid-column:1/-1; text-align:center; padding:4rem 2rem; font-family:var(--kr); font-size:15px; font-weight:700; color:#b0a0cc; line-height:1.8; word-break:keep-all; }
+.postit-loading { grid-column:1/-1; text-align:center; padding:2rem; font-family:var(--px); font-size:13px; color:#b0a0cc; line-height:2; letter-spacing:.1em; }
+.board-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; min-width:0; }
+.board-count { font-family:var(--kr); font-size:14px; font-weight:700; color:var(--pur); word-break:keep-all; }
+
+/* FOOTER */
+footer { background: var(--blk); border-top: 3px solid var(--pur); padding: 48px 32px 36px; text-align: center; }
+.footer-orgs-row { display: flex; justify-content: center; gap: 0; flex-wrap: wrap; margin-bottom: 28px; }
+.footer-org-block {
+  flex: 1; min-width: 260px; max-width: 420px;
+  padding: 24px 28px;
+  border: 1px solid rgba(157,59,242,.2);
+  border-radius: 12px; margin: 6px;
+}
+.footer-org-name { font-family: var(--kr); font-weight: 900; font-size: 17px; color: var(--pur3); margin-bottom: 10px; }
+.footer-units-details { margin-bottom: 12px; }
+.footer-units-details summary {
+  font-family: var(--kr); font-size: 12px; font-weight: 700;
+  color: #9d8ac0; cursor: pointer;
+  list-style: none; padding: 4px 0;
+  transition: color .2s;
+  user-select: none;
+}
+.footer-units-details summary::-webkit-details-marker { display: none; }
+.footer-units-details summary:hover { color: var(--pur3); }
+.footer-units-details summary .caret {
+  display: inline-block; transition: transform .2s; margin-left: 4px;
+  font-size: 10px;
+}
+.footer-units-details[open] summary .caret { transform: rotate(180deg); }
+.footer-org-units { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; justify-content: center; }
+.fu-tag { font-family: var(--kr); font-size: 12px; color: #7a5fa0; background: rgba(157,59,242,.08); border: 1px solid rgba(157,59,242,.15); border-radius: 4px; padding: 3px 8px; white-space: nowrap; line-height: 1.6; text-decoration: none; display: inline-block; }
+a.fu-tag:hover { background: rgba(157,59,242,.2); color: var(--pur3); border-color: rgba(157,59,242,.35); }
+.footer-org-contact { font-family: var(--kr); font-size: 13px; color: #5a4a7a; line-height: 2; }
+.footer-org-contact a { color: var(--pur3); text-decoration: none; }
+.footer-sns-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; justify-content: center; }
+.footer-sns-row a {
+  font-family: var(--kr); font-size: 12px; font-weight: 700;
+  color: #c9b8e0; text-decoration: none;
+  background: rgba(157,59,242,.15); border: 1px solid rgba(157,59,242,.25);
+  border-radius: 20px; padding: 5px 14px;
+  transition: all .2s; white-space: nowrap;
+}
+.footer-sns-row a:hover { background: var(--pur); color: #fff; border-color: var(--pur); }
+.footer-hotline {
+  display: block;
+  background: var(--pur); color: #fff;
+  border: 2px solid var(--pur); border-radius: 8px;
+  padding: 14px 20px; margin-bottom: 18px;
+  font-family: var(--kr); font-size: 15px; font-weight: 900;
+  text-decoration: none; text-align: center; line-height: 1.4;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+  box-shadow: 3px 3px 0 rgba(157,59,242,.3);
+}
+.footer-hotline:hover { background: var(--pur2); border-color: var(--pur2); transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(157,59,242,.35); }
+.footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+.footer-links a { font-family: var(--kr); font-size: 13px; font-weight: 700; color: #7a5fa0; text-decoration: none; transition: color .2s; }
+.footer-links a:hover { color: var(--pur3); }
+.footer-copy { font-family: var(--kr); font-size: 12px; color: #3a2a5a; line-height: 1.8; }
+.hotline { display: inline-block; font-family: var(--px); font-size: 13px; color: #fff; background: var(--pur); padding: 14px 28px; border-radius: 6px; margin-bottom: 24px; text-decoration: none; line-height: 1.8; }
+
+/* Board section heading wrapper */
+.board-heading { margin-bottom: 40px; }
+
+/* ─── 관리자/포스트잇 작은 버튼 ─── */
+.postit-admin-btns { position:absolute; top:8px; right:8px; display:flex; gap:4px; z-index:10; }
+.postit-edit-btn, .postit-del-btn {
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; border-radius: 6px;
+  font-size: 13px; line-height: 1;
+  cursor: pointer; transition: background .2s;
+}
+.postit-edit-btn { background: rgba(157,59,242,.15); color: var(--pur2); }
+.postit-edit-btn:hover { background: rgba(157,59,242,.35); }
+.postit-del-btn { background: rgba(231,76,60,.15); color: #c0392b; }
+.postit-del-btn:hover { background: rgba(231,76,60,.35); }
+
+.atab {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 36px; padding: 0 16px;
+  background: transparent; color: var(--pur);
+  border: 1.5px solid var(--pur); border-radius: 6px;
+  font-family: var(--kr); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background .2s, color .2s;
+  line-height: 1; white-space: nowrap;
+}
+.atab:hover:not(.atab-active) { background: var(--pur4); }
+.atab-active { background: var(--pur); color: #fff; }
+
+.admin-table { width:100%; border-collapse:collapse; font-family:var(--kr); font-size:13px; margin-top:8px; }
+.admin-table th { background:var(--pur); color:#fff; padding:10px 12px; text-align:left; font-family:var(--kr); font-weight:700; }
+.admin-table td { padding:9px 12px; border-bottom:1px solid var(--pur4); vertical-align:top; word-break:keep-all; }
+.admin-table tr:hover td { background:var(--pur5); }
+
+.admin-del-row {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 28px; padding: 0 12px;
+  background: rgba(231,76,60,.12); color: #c0392b;
+  border: 1px solid rgba(231,76,60,.25); border-radius: 5px;
+  font-family: var(--kr); font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: background .2s, border-color .2s;
+  line-height: 1; white-space: nowrap;
+}
+.admin-del-row:hover { background: rgba(231,76,60,.25); border-color: #e74c3c; }
+
+.admin-export-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 40px; padding: 0 18px; margin-top: 12px;
+  background: var(--blk); color: var(--pur3);
+  border: 2px solid var(--blk); border-radius: 6px;
+  font-family: var(--kr); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background .2s, border-color .2s;
+  line-height: 1; white-space: nowrap;
+}
+.admin-export-btn:hover { background: #2a1a4e; border-color: #2a1a4e; }
+
+/* 동적으로 생성되는 작은 칩 버튼들 */
+.admin-chip-id {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--kr); font-size: 12px; font-weight: 700; color: var(--pur);
+  line-height: 1;
+}
+.admin-chip-view {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  height: 30px; padding: 0 12px;
+  background: var(--pur); color: #fff;
+  border: 1.5px solid var(--pur); border-radius: 6px;
+  font-family: var(--kr); font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: background .2s, border-color .2s;
+  line-height: 1; white-space: nowrap;
+}
+.admin-chip-view:hover { background: var(--pur2); border-color: var(--pur2); }
+.admin-chip-logout {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 30px; padding: 0 12px;
+  background: transparent; color: var(--pur);
+  border: 1.5px solid var(--pur); border-radius: 6px;
+  font-family: var(--kr); font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: background .2s;
+  line-height: 1; white-space: nowrap;
+}
+.admin-chip-logout:hover { background: var(--pur5); }
+
+.admin-danger-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 40px; padding: 0 18px;
+  background: rgba(231,76,60,.12); color: #c0392b;
+  border: 1.5px solid rgba(231,76,60,.3); border-radius: 6px;
+  font-family: var(--kr); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background .2s, border-color .2s;
+  line-height: 1; white-space: nowrap;
+}
+.admin-danger-btn:hover { background: rgba(231,76,60,.25); border-color: #e74c3c; }
+
+
+/* ─── 레트로 툴 트레이 (미니 윈도우 스타일로 관리자/새로고침 묶음) ─── */
+.tool-tray {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #f5f5f5;
+  border: 1.5px solid var(--blk);
+  border-radius: 6px;
+  padding: 5px 10px 5px 8px;
+  box-shadow: 3px 3px 0 rgba(157,59,242,.22);
+  flex-wrap: wrap;
+}
+.tool-tray .window-dots {
+  gap: 4px; flex-shrink: 0;
+  padding-right: 8px;
+  border-right: 1px dashed var(--pur4);
+  margin-right: 2px;
+}
+.tool-tray .dot { width: 9px; height: 9px; }
+.tool-tray-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  height: 28px; padding: 0 10px;
+  background: transparent; color: var(--pur);
+  border: 1.5px solid rgba(157,59,242,.3); border-radius: 5px;
+  font-family: var(--kr); font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: background .2s, border-color .2s, color .2s;
+  line-height: 1; white-space: nowrap;
+}
+.tool-tray-btn:hover {
+  background: rgba(157,59,242,.1); border-color: var(--pur); color: var(--pur2);
+}
+.tool-tray #admin-bar { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+/* 트레이 안의 admin 칩 버튼 사이즈 작게 통일 */
+.tool-tray .board-tool-btn,
+.tool-tray .admin-chip-view,
+.tool-tray .admin-chip-logout {
+  min-width: 0; height: 28px; padding: 0 10px;
+  font-size: 12px; border-radius: 5px;
+}
+.tool-tray .admin-chip-id { font-size: 11px; }
+
+/* 다크 변형 — 대시보드(검정 배경) 위에 올라갈 때 */
+.tool-tray-dark {
+  background: rgba(157,59,242,.08);
+  border-color: rgba(157,59,242,.35);
+  box-shadow: 3px 3px 0 rgba(157,59,242,.2);
+}
+.tool-tray-dark .window-dots { border-right-color: rgba(157,59,242,.3); }
+.tool-tray-dark .tool-tray-btn { color: var(--pur3); border-color: rgba(157,59,242,.3); }
+.tool-tray-dark .tool-tray-btn:hover { background: rgba(157,59,242,.18); border-color: var(--pur3); color: #fff; }
+
+/* LOADING 깜빡이는 커서 */
+.dash-loading::after, .postit-loading::after {
+  content: '_';
+  display: inline-block; margin-left: 4px;
+  animation: blinkCaret 1.05s steps(1) infinite;
+}
+@keyframes blinkCaret {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* 작은 도구 버튼 (관리자 로그인 / 새로고침) — 새로고침 .refresh-btn과 같은 톤 */
+.board-tool-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 92px; height: 36px; padding: 0 14px;
+  background: transparent;
+  border: 1.5px solid rgba(157,59,242,.3); border-radius: 6px;
+  font-family: var(--kr); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background .2s, border-color .2s, color .2s;
+  line-height: 1; white-space: nowrap;
+}
+.board-tool-btn.login { color: #9d8ac0; }
+.board-tool-btn.refresh { color: var(--pur2); }
+.board-tool-btn:hover { background: var(--pur5); border-color: var(--pur); color: var(--pur2); }
+
+/* ══════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════ */
+
+/* 햄버거 메뉴 버튼 */
+.nav-hamburger { margin-left: auto;
+  display: none;
+  flex-direction: column; gap: 5px; cursor: pointer;
+  background: none; border: none; padding: 8px; z-index: 300;
+}
+.nav-hamburger span {
+  display: block; width: 24px; height: 2px;
+  background: #fff; border-radius: 2px; transition: all .3s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+/* 모바일 드로어 */
+.nav-drawer {
+  display: none;
+  position: fixed; top: 62px; left: 0; right: 0; z-index: 190;
+  left: env(safe-area-inset-left); right: env(safe-area-inset-right);
+  background: var(--blk);
+  border-bottom: 3px solid var(--pur);
+  padding: 16px 20px;
+  flex-direction: column; gap: 10px;
+}
+.nav-drawer.open { display: flex; animation: slideIn .25s ease; }
+.nav-drawer a {
+  font-family: var(--kr); font-size: 16px; font-weight: 700; color: #fff;
+  text-decoration: none;
+  background: rgba(157,59,242,.2);
+  border: 1.5px solid rgba(157,59,242,.4);
+  border-radius: 8px; padding: 14px 18px;
+  display: block; text-align: center;
+  transition: background .2s;
+}
+.nav-drawer a:active { background: var(--pur); }
+
+@media (max-width: 768px) {
+  /* NAV */
+  nav { padding: 0 max(16px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-left)); height: 56px; }
+  .nav-drawer { top: 56px; }
+  .nav-logo-kr { font-size: 13px; }
+  .nav-logo-kr span { font-size: 10px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .host-banner { margin-top: 56px; padding: 10px 16px 12px; }
+
+  /* TICKER */
+  .ticker { padding: 9px 0; }
+  .ticker-inner { font-size: 11px; }
+
+  /* INTRO SLIDES */
+  .intro-slide { padding: 16px 12px 24px; min-height: calc(100vh - 56px); }
+  .slide1-window { border-radius: 14px; }
+  .slide1-body { padding: 24px 20px 32px; }
+  .slide1-title { font-size: clamp(18px,5vw,26px); line-height: 1.6; margin-bottom: 16px; }
+  .slide1-subtitle { font-size: clamp(15px,4vw,20px); margin-bottom: 10px; }
+  .slide1-desc { font-size: clamp(13px,3.5vw,16px); margin-bottom: 28px; }
+  .slide1-btn { font-size: 16px; padding: 14px 28px; }
+
+  .slide2-window { border-radius: 14px; }
+  .slide2-body { padding: 24px 20px 32px; }
+  .slide2-eyebrow { font-size: 11px; margin-bottom: 8px; }
+  .slide2-title { font-size: clamp(22px,6vw,36px); margin-bottom: 20px; }
+  .slide2-content { flex-direction: column; align-items: center; gap: 24px; }
+  .slide2-text { max-width: 100%; width: 100%; min-width: 0; }
+  .slide2-text-main { font-size: 15px; }
+  .slide2-enter-btn { font-size: 17px; padding: 18px 24px; }
+  .wage-clock { width: 180px; height: 180px; }
+  .caption-big { font-size: 18px; }
+
+  /* 슬라이드 1 동전 데코: 모바일에서 작게 */
+  .slide1-coin.coin-a { width: 40px; height: 40px; bottom: 24px; left: -10px; }
+  .slide1-coin.coin-b { width: 28px; height: 28px; top: 40px; left: -14px; }
+
+  /* CALCULATOR SECTION */
+  .calc-section-wrap { padding: 36px 10px 0; }
+  .calc-heading-wrap { margin-bottom: 20px; padding: 0 2px; }
+  .section-title { font-size: clamp(17px,4.2vw,24px); word-break: keep-all; overflow-wrap: break-word; line-height: 1.5; }
+  .section-desc { font-size: 14px; word-break: keep-all; }
+  .calc-card { border-radius: 14px; margin: 0; width: 100%; }
+  .calc-grid { grid-template-columns: 1fr; width: 100%; }
+  .input-panel { padding: 20px 16px; min-width: 0; }
+  .result-panel { padding: 20px 16px; border-left: none; border-top: 1px solid var(--pur4); min-width: 0; }
+  .panel-label { font-size: 13px; margin-bottom: 14px; word-break: keep-all; }
+  .field { margin-bottom: 18px; }
+  .field label { font-size: 15px; word-break: keep-all; }
+  .field-row { gap: 8px; min-width: 0; }
+  .field input { height: 50px; font-size: 19px; min-width: 0; padding: 0 12px; }
+  .unit { font-size: 11px; }
+  .hint { font-size: 12px; }
+  .formula-box { padding: 12px 14px; margin-bottom: 18px; overflow: hidden; }
+  .formula-title { font-size: 12px; word-break: keep-all; }
+  .formula-row { gap: 6px; }
+  .formula-lbl { font-size: 14px; }
+  .formula-val { font-size: 12px; word-break: keep-all; min-width: 0; }
+  .calc-btn { height: 52px; font-size: 15px; word-break: keep-all; }
+  .result-empty { padding: 28px 16px; }
+  .result-empty p { font-size: 13px; line-height: 1.7; }
+  .rbox { padding: 11px; }
+  .rbox-lbl { font-size: 11px; }
+  .rbox-val { font-size: 16px; }
+  .rbox.big { padding: 18px 14px; }
+  .rbox.big .rbox-lbl { font-size: 12px; }
+  .rbox.big .rbox-val { font-size: 24px; }
+  .rbox-sub { font-size: 11px; }
+  .rbox.big .rbox-sub { font-size: 12px; }
+  .action-btn-dash, .action-btn-board { height: 54px; font-size: 14px; }
+  .ghost-btn { height: 44px; font-size: 13px; }
+  .submit-note { font-size: 13px; word-break: keep-all; }
+  .success-banner { padding: 12px 14px; }
+  .success-banner-title { font-size: 13px; }
+  .success-banner-body { font-size: 12px; }
+
+  /* DASHBOARD */
+  .section { padding: 48px 16px; }
+  .dash-header-row { flex-direction: column; gap: 10px; }
+  .dash-grid { grid-template-columns: 1fr; }
+  .stat-num { font-size: 18px; }
+  .stat-lbl { font-size: 12px; }
+  .bar-lbl { font-size: 12px; width: 78px; }
+  .bar-track { height: 22px; }
+  .bar-cnt { font-size: 10px; }
+  .chart-title { font-size: 13px; }
+  .recent-title { font-size: 13px; }
+  .entry-val { font-size: 12px; }
+  .entry-time { font-size: 9px; }
+
+  /* BOARD */
+  .board-heading { margin-bottom: 28px; }
+  #board .section { padding: 40px 10px; overflow-x: hidden; }
+  .postit-form { padding: 16px 14px; margin-bottom: 28px; max-width: 100%; border-radius: 12px; }
+  .postit-form-title { font-size: 13px; line-height: 1.5; word-break: keep-all; margin-bottom: 14px; }
+  .nick-row { gap: 8px; min-width: 0; }
+  .nick-label { font-size: 12px; }
+  .nick-input { height: 42px; font-size: 14px; min-width: 0; padding: 0 10px; }
+  textarea#voice { font-size: 14px; height: 90px; padding: 10px; }
+  .form-footer { gap: 8px; margin-top: 10px; }
+  .post-btn { height: 44px; font-size: 14px; padding: 0 18px; }
+  .char-count { font-size: 11px; }
+  .board-heading .section-title { font-size: clamp(17px,4.2vw,24px); word-break: keep-all; }
+  .postit-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; width: 100%; }
+  .postit { font-size: 12px; padding: 14px 10px 26px; min-height: 110px; }
+  .postit-nick { font-size: 10px; }
+  .postit-time { font-size: 9px; }
+  .board-meta { gap: 8px; }
+  .board-count { font-size: 12px; word-break: keep-all; }
+  .postit-empty { font-size: 13px; padding: 2rem 1rem; word-break: keep-all; line-height: 1.7; }
+
+  /* FOOTER */
+  footer { padding: 32px 16px 28px; }
+  .footer-orgs-row { flex-direction: column; }
+  .footer-org-block { min-width: unset; max-width: 100%; padding: 18px 16px; margin: 4px 0; }
+  .footer-org-name { font-size: 15px; }
+  .footer-org-units { font-size: 11px; }
+  .footer-org-contact { font-size: 12px; }
+  .footer-hotline { font-size: 13px; padding: 12px 16px; }
+  .footer-sns-row { gap: 6px; }
+  .footer-sns-row a { font-size: 11px; padding: 4px 10px; }
+  .footer-copy { font-size: 11px; }
+
+  /* 성별임금격차 설명 바 */
+  .gap-explain-bar { padding: 12px 14px; gap: 8px; font-size: 14px; }
+  .gap-explain-badge { font-size: 13px; padding: 5px 10px; }
+  .gap-explain-text { font-size: 14px; }
+
+  /* 결과 격차 그래픽 */
+  .gap-graphic { padding: 12px 14px; }
+  .gap-graphic-title { font-size: 12px; }
+  .gap-bar-lbl { font-size: 11px; width: 46px; }
+  .gap-bar-fill { font-size: 10px; }
+  .gap-bar-pct { font-size: 11px; width: 28px; }
+  .gap-graphic-desc { font-size: 12px; }
+  .gap-graphic-sub { font-size: 11px; }
+
+  /* 공유 박스 */
+  .share-tag-box { padding: 12px 14px; }
+  .share-tag-title { font-size: 12px; }
+  .share-chip { font-size: 11px; padding: 3px 10px; }
+  .share-copy-btn { font-size: 13px; height: 44px; }
+  .share-img-btn { font-size: 13px; height: 44px; }
+  .share-copied-msg, .share-img-msg { font-size: 12px; }
+
+  /* 이미지 미리보기 모달 */
+  .img-preview-modal { padding: 12px; }
+  .img-preview-modal-box { max-height: 92svh; border-radius: 12px; }
+  .img-preview-title { font-size: 13px; }
+  .img-preview-guide { font-size: 12px; padding: 12px 14px; }
+  .img-preview-guide span { font-size: 11px; }
+
+}
+
+@media (max-width: 400px) {
+  .slide1-btn { font-size: 15px; padding: 13px 22px; }
+  .slide2-enter-btn { font-size: 16px; padding: 16px 22px; }
+  .calc-btn { font-size: 14px; height: 50px; }
+  .action-btn-dash, .action-btn-board { font-size: 13px; height: 50px; }
+  .ghost-btn { font-size: 12px; height: 42px; }
+  .post-btn { font-size: 13px; height: 42px; padding: 0 14px; }
+  .nav-logo-kr { font-size: 11px; }
+  .gap-explain-bar { padding: 10px 10px; font-size: 13px; }
+  .gap-explain-badge { font-size: 12px; padding: 4px 8px; }
+  .share-copy-btn, .share-img-btn { font-size: 12px; height: 42px; }
+  .share-chip { font-size: 10px; padding: 3px 8px; }
+
+}
+/* ─── 공통 모달 (alert/confirm/prompt 대체) ─── */
+.app-modal {
+  display: none; position: fixed; inset: 0; z-index: 10000;
+  background: rgba(26,10,46,.7);
+  align-items: center; justify-content: center; padding: 20px;
+  animation: appModalFade .15s ease;
+}
+.app-modal.show { display: flex; }
+@keyframes appModalFade { from { opacity: 0; } to { opacity: 1; } }
+.app-modal-box {
+  width: min(420px, 100%);
+  background: #fff; border: 2px solid var(--pur);
+  border-radius: 14px; padding: 28px 26px 24px;
+  box-shadow: 6px 6px 0 rgba(157,59,242,.3);
+  animation: appModalPop .2s ease;
+  text-align: center;
+}
+@keyframes appModalPop { from { transform: translate(4px,4px) scale(.96); opacity:0; } to { transform: translate(0,0) scale(1); opacity:1; } }
+.app-modal-icon {
+  font-size: 28px; margin-bottom: 8px; line-height: 1;
+}
+.app-modal-title {
+  font-family: var(--kr); font-size: 18px; font-weight: 900;
+  color: var(--blk); margin-bottom: 8px;
+}
+.app-modal-body {
+  font-family: var(--kr); font-size: 14px; font-weight: 400;
+  color: #555; line-height: 1.7; margin-bottom: 18px;
+  word-break: keep-all;
+}
+.app-modal-input-wrap { display: none; margin-bottom: 16px; }
+.app-modal-input {
+  width: 100%; height: 46px;
+  border: 2px solid var(--pur4); border-radius: 8px;
+  padding: 0 14px;
+  font-family: var(--kr); font-size: 15px; font-weight: 700;
+  color: var(--blk); background: var(--pur5);
+  outline: none; transition: border-color .2s, box-shadow .2s;
+}
+.app-modal-input:focus { border-color: var(--pur); box-shadow: 0 0 0 3px rgba(157,59,242,.12); }
+.app-modal-actions {
+  display: flex; gap: 10px;
+}
+.app-modal-actions button {
+  flex: 1; height: 46px;
+  border-radius: 8px;
+  font-family: var(--kr); font-size: 15px; font-weight: 900;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+  line-height: 1;
+}
+.app-modal-cancel { background: #fff; color: var(--pur); border: 2px solid var(--pur4); }
+.app-modal-cancel:hover { background: var(--pur5); border-color: var(--pur); }
+.app-modal-ok { background: var(--pur); color: #fff; border: 2px solid var(--pur); box-shadow: 3px 3px 0 rgba(157,59,242,.3); }
+.app-modal-ok:hover { background: var(--pur2); border-color: var(--pur2); transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(157,59,242,.35); }
+.app-modal-ok.danger { background: var(--red); border-color: var(--red); box-shadow: 3px 3px 0 rgba(231,76,60,.3); }
+.app-modal-ok.danger:hover { background: #c0392b; border-color: #c0392b; box-shadow: 5px 5px 0 rgba(231,76,60,.35); }
+
+/* 관리자 로그인 모달 */
+.admin-login-modal {
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(26,10,46,.68);
+  align-items:center; justify-content:center; padding:20px;
+}
+.admin-login-modal.show { display:flex; }
+.admin-login-box {
+  width:min(420px, 100%); background:#fff; border:2px solid var(--pur);
+  border-radius:16px; box-shadow:8px 8px 0 rgba(0,0,0,.18); padding:28px;
+}
+.admin-login-title { font-family:var(--kr); font-size:20px; font-weight:900; color:var(--pur2); margin-bottom:10px; }
+.admin-login-desc { font-family:var(--kr); font-size:14px; color:#7a5fa0; line-height:1.7; margin-bottom:16px; }
+.admin-login-input {
+  width:100%; height:52px; border:2px solid var(--pur4); border-radius:8px;
+  padding:0 14px; font-family:var(--kr); font-size:16px; font-weight:700;
+  outline:none; background:var(--pur5); color:var(--blk);
+}
+.admin-login-input:focus { border-color:var(--pur); box-shadow:0 0 0 3px rgba(157,59,242,.12); }
+.admin-login-error { display:none; font-family:var(--kr); font-size:13px; color:var(--red); margin-top:10px; }
+.admin-login-actions { display:flex; gap:10px; margin-top:18px; }
+.admin-login-actions button {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: 1; height: 48px; border-radius: 8px;
+  font-family: var(--kr); font-size: 15px; font-weight: 900;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s;
+  line-height: 1;
+}
+.admin-login-cancel { background: #fff; color: var(--pur); border: 2px solid var(--pur4); }
+.admin-login-cancel:hover { background: var(--pur5); border-color: var(--pur); }
+.admin-login-submit { background: var(--pur); color: #fff; border: 2px solid var(--pur); box-shadow: 3px 3px 0 rgba(157,59,242,.3); }
+.admin-login-submit:hover { background: var(--pur2); border-color: var(--pur2); transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(157,59,242,.35); }
+
+
+/* ══════════════════════════════
+   iOS / Android 전용 호환성 패치
+══════════════════════════════ */
+
+/* iOS 노치(safe area) — nav 좌우 패딩 보정 */
+nav {
+  padding-left: max(28px, env(safe-area-inset-left));
+  padding-right: max(28px, env(safe-area-inset-right));
+}
+
+/* iOS 키보드 올라왔을 때 fixed nav 밀림 방지 */
+@supports (-webkit-touch-callout: none) {
+  nav { position: -webkit-sticky; position: sticky; }
+}
+
+/* 모든 input/textarea 16px 이상 강제 → iOS 자동 zoom 방지 */
+input, textarea, select {
+  font-size: max(16px, 1em) !important;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* 버튼 active 피드백 (모바일 hover 미지원 대체) */
+button:active, a:active {
+  opacity: 0.75;
+  transform: scale(0.97);
+  transition: opacity 0.1s, transform 0.1s;
+}
+
+/* iOS Safari 100vh 버그 수정 */
+.intro-slide {
+  min-height: 100svh;
+}
+@supports not (min-height: 100svh) {
+  .intro-slide {
+    min-height: -webkit-fill-available;
+    min-height: 100vh;
+  }
+}
+
+/* 테이블 가로 스크롤 (관리자 뷰) */
+.admin-table-wrap, div[style*="overflow-x:auto"] {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  max-width: 100%;
+}
+.admin-table {
+  min-width: 600px;
+}
+
+/* 포스트잇 그리드 터치 스크롤 */
+.postit-grid {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+/* 모달 — iOS에서 position:fixed + 키보드 버그 방지 */
+.app-modal, .admin-login-modal {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.app-modal-box, .admin-login-box {
+  max-height: 90svh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Android Chrome 주소창 축소 시 레이아웃 보호 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .intro-slide { min-height: auto; padding: 40px 24px; }
+  nav { height: 48px; }
+  .host-banner { margin-top: 48px; }
+  .nav-drawer { top: 48px; }
+}
+
+/* 모바일에서 탭 영역 최소 44px (WCAG / Apple HIG) */
+.nav-links a, .nav-cta, .slide1-btn, .slide2-enter-btn,
+.calc-btn, .action-btn-dash, .action-btn-board,
+.ghost-btn, .post-btn, .board-tool-btn, .tool-tray-btn,
+.intro-skip, .atab, .admin-export-btn, .admin-danger-btn,
+.admin-del-row, .postit-edit-btn, .postit-del-btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* footer 하단 safe area (홈바 침범 방지) */
+footer {
+  padding-bottom: max(32px, calc(24px + env(safe-area-inset-bottom)));
+}
+
+/* 드로어 safe area */
+.nav-drawer {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+/* 선택 드래그 비활성화 — 잘못된 터치 선택 방지 */
+nav, .ticker, .intro-slide .slide1-title,
+.slide1-subtitle, .slide2-title {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Android WebView 텍스트 선택 커서 색상 */
+::selection { background: rgba(157, 59, 242, 0.3); }
+
+
+/* ══════════════════════════════
+   성별임금격차 설명 바 (계산기 위)
+══════════════════════════════ */
+.gap-explain-bar {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 10px; text-align: center;
+  background: linear-gradient(135deg, #f0e4ff 0%, #ffe8f0 100%);
+  border: 1.5px solid rgba(157,59,242,.3);
+  border-radius: 10px; padding: 16px 20px; margin-bottom: 18px;
+  font-family: var(--kr); font-size: 15px; color: #3a2060; line-height: 1.7;
+  word-break: keep-all;
+}
+.gap-explain-badge {
+  display: inline-block;
+  background: var(--pur); color: #fff;
+  font-family: var(--kr); font-size: 15px; font-weight: 900;
+  padding: 6px 14px; border-radius: 999px; white-space: nowrap;
+  letter-spacing: .02em;
+}
+.gap-explain-text {
+  font-family: var(--kr); font-size: 15px; color: #3a2060;
+  line-height: 1.7; word-break: keep-all; text-align: center;
+}
+@media (max-width: 480px) {
+  .gap-explain-bar { padding: 14px 14px; font-size: 14px; }
+  .gap-explain-badge { font-size: 13px; padding: 5px 12px; }
+  .gap-explain-text { font-size: 14px; }
+}
+
+/* ══════════════════════════════
+   결과 - 성별임금격차 그래픽
+══════════════════════════════ */
+.gap-graphic {
+  background: linear-gradient(135deg, #fdf6ff 0%, #fff0f4 100%);
+  border: 1.5px solid rgba(157,59,242,.2);
+  border-radius: 12px; padding: 16px 18px; margin: 10px 0;
+}
+.gap-graphic-title {
+  font-family: var(--kr); font-size: 13px; font-weight: 900;
+  color: var(--pur2); margin-bottom: 12px; letter-spacing: .04em;
+}
+.gap-graphic-body { display: flex; flex-direction: column; gap: 10px; }
+.gap-bar-wrap { display: flex; flex-direction: column; gap: 8px; }
+.gap-bar-row { display: flex; align-items: center; gap: 8px; }
+.gap-bar-lbl {
+  font-family: var(--kr); font-size: 12px; font-weight: 700;
+  color: #7a5fa0; width: 54px; flex-shrink: 0; text-align: right;
+}
+.gap-bar-track {
+  flex: 1; height: 26px; background: rgba(157,59,242,.08);
+  border-radius: 4px; overflow: hidden;
+}
+.gap-bar-fill {
+  height: 100%; border-radius: 4px;
+  display: flex; align-items: center; justify-content: flex-end; padding-right: 8px;
+  font-family: var(--kr); font-size: 11px; font-weight: 900; color: #fff;
+  transition: width .8s ease;
+}
+.gap-bar-fill.male { width: 100%; background: var(--pur); }
+.gap-bar-fill.female { width: 71%; background: var(--red); }
+.gap-bar-pct {
+  font-family: var(--kr); font-size: 12px; font-weight: 900;
+  color: var(--pur2); width: 34px; flex-shrink: 0;
+}
+.gap-pct-red { color: var(--red); }
+.gap-graphic-desc {
+  font-family: var(--kr); font-size: 13px; color: #555;
+  line-height: 1.8; word-break: keep-all; border-top: 1px solid rgba(157,59,242,.15); padding-top: 10px;
+}
+.gap-graphic-sub { font-size: 12px; color: #888; }
+
+/* ══════════════════════════════
+   공유 해시태그 박스
+══════════════════════════════ */
+.share-tag-box {
+  background: #fff8e7; border: 1.5px solid #ffd54f;
+  border-radius: 12px; padding: 16px 18px; margin: 10px 0;
+}
+.share-tag-title {
+  font-family: var(--kr); font-size: 13px; font-weight: 900;
+  color: #7a4f00; margin-bottom: 10px;
+}
+.share-tag-chips {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+}
+.share-chip {
+  display: inline-block;
+  background: rgba(157,59,242,.1); border: 1px solid rgba(157,59,242,.25);
+  color: var(--pur2); border-radius: 999px;
+  font-family: var(--kr); font-size: 12px; font-weight: 700;
+  padding: 4px 12px; white-space: nowrap; word-break: keep-all;
+}
+.share-copy-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; height: 46px;
+  background: var(--gold); color: var(--blk);
+  border: 2px solid var(--gold2); border-radius: 8px;
+  font-family: var(--kr); font-size: 14px; font-weight: 900;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s;
+  box-shadow: 3px 3px 0 rgba(255,179,0,.3);
+  line-height: 1;
+}
+.share-copy-btn:hover { background: var(--gold2); transform: translate(-1px,-1px); box-shadow: 4px 4px 0 rgba(255,179,0,.35); }
+.share-copy-btn:active { transform: translate(0,0); }
+.share-copied-msg {
+  display: none;
+  font-family: var(--kr); font-size: 13px; font-weight: 700;
+  color: var(--grn); margin-top: 8px; text-align: center;
+  animation: fu .3s ease;
+}
+.share-copied-msg.show { display: block; }
+
+
+/* ══════════════════════════════
+   시계 왼쪽 말풍선
+══════════════════════════════ */
+.clock-bubble-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: center;
+  width: 100%;
+}
+.clock-bubble {
+  width: 158px;
+  flex-shrink: 0;
+  background: #fff;
+  border: 2px solid var(--pur);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-family: var(--kr);
+  font-size: 11.5px;
+  color: #3a2060;
+  line-height: 1.65;
+  word-break: keep-all;
+  box-shadow: 3px 3px 0 rgba(157,59,242,.2);
+  position: relative;
+  transform: rotate(-4deg);
+  transform-origin: bottom right;
+}
+/* 말풍선 꼬리 — 오른쪽(시계 방향) */
+.clock-bubble::after {
+  content: '';
+  position: absolute;
+  top: 26px;
+  right: -10px;
+  border-width: 7px 0 7px 10px;
+  border-style: solid;
+  border-color: transparent transparent transparent #fff;
+}
+.clock-bubble::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  right: -13px;
+  border-width: 9px 0 9px 13px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--pur);
+}
+.clock-bubble strong { color: var(--pur2); font-weight: 900; }
+.clock-bubble .bubble-badge {
+  display: inline-block;
+  background: var(--red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-bottom: 5px;
+  letter-spacing: .02em;
+}
+@media (max-width: 700px) {
+  .clock-bubble { display: none; }
+  .clock-bubble-wrap { justify-content: center; }
+}
+
+
+/* ══════════════════════════════
+   시계 오른쪽 빨간 말풍선
+══════════════════════════════ */
+.unpaid-outer-bubble {
+  position: relative;
+  width: 130px;
+  flex-shrink: 0;
+  background: #fff0f0;
+  border: 2px solid var(--red);
+  border-radius: 12px;
+  padding: 9px 12px;
+  font-family: var(--kr);
+  font-size: 12px;
+  font-weight: 700;
+  color: #b02020;
+  line-height: 1.6;
+  word-break: keep-all;
+  box-shadow: 3px 3px 0 rgba(231,76,60,.25);
+  transform: rotate(3deg);
+  text-align: center;
+}
+/* 꼬리: 왼쪽(시계 방향) */
+.unpaid-outer-bubble::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: -13px;
+  border-width: 8px 12px 8px 0;
+  border-style: solid;
+  border-color: transparent var(--red) transparent transparent;
+}
+.unpaid-outer-bubble::after {
+  content: '';
+  position: absolute;
+  top: 21px;
+  left: -10px;
+  border-width: 7px 10px 7px 0;
+  border-style: solid;
+  border-color: transparent #fff0f0 transparent transparent;
+}
+@media (max-width: 700px) {
+  .unpaid-outer-bubble { display: none; }
+}
+
+
+.share-img-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; height: 46px; margin-top: 8px;
+  background: #1a0a2e; color: #fff;
+  border: 2px solid #3a2060; border-radius: 8px;
+  font-family: var(--kr); font-size: 14px; font-weight: 900;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.25);
+  line-height: 1;
+}
+.share-img-btn:hover { background: #2a1a4e; transform: translate(-1px,-1px); box-shadow: 4px 4px 0 rgba(0,0,0,.3); }
+.share-img-btn:active { transform: translate(0,0); }
+.share-img-msg {
+  display: none;
+  font-family: var(--kr); font-size: 13px; font-weight: 700;
+  color: #2d7dd2; margin-top: 8px; text-align: center;
+  animation: fu .3s ease;
+}
+.share-img-msg.show { display: block; }
+
+
+/* ══════════════════════════════
+   이미지 미리보기 팝업 모달
+══════════════════════════════ */
+.img-preview-modal {
+  display: none; position: fixed; inset: 0; z-index: 20000;
+  background: rgba(10,4,20,.85);
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 0;
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+}
+.img-preview-modal.show { display: flex; animation: appModalFade .2s ease; }
+.img-preview-modal-box {
+  width: min(520px, 100%);
+  background: #fff; border: 2px solid var(--pur);
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 8px 8px 0 rgba(157,59,242,.35);
+  display: flex; flex-direction: column;
+  max-height: 90vh;
+  max-height: 90svh;
+}
+.img-preview-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--blk); border-bottom: 2px solid var(--pur);
+  flex-shrink: 0;
+}
+.img-preview-title {
+  font-family: var(--kr); font-size: 14px; font-weight: 900; color: #fff;
+}
+.img-preview-close {
+  background: transparent; border: none; color: #aaa;
+  font-size: 22px; cursor: pointer; line-height: 1; padding: 0 4px;
+  transition: color .2s;
+}
+.img-preview-close:hover { color: #fff; }
+.img-preview-img-wrap {
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  flex: 1; padding: 16px;
+  display: flex; align-items: center; justify-content: center;
+  background: #f8f2ff;
+}
+.img-preview-img-wrap img {
+  width: 100%; border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.15);
+  display: block;
+}
+.img-preview-guide {
+  padding: 14px 18px;
+  background: #fff8e7; border-top: 1.5px solid #ffd54f;
+  font-family: var(--kr); font-size: 13px; font-weight: 700;
+  color: #7a4f00; text-align: center; line-height: 1.6;
+  flex-shrink: 0;
+}
+.img-preview-guide span {
+  font-size: 12px; font-weight: 400; color: #a07000; display: block; margin-top: 2px;
+}
+
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .img-preview-modal-box { max-height: 96vh; flex-direction: row; }
+  .img-preview-img-wrap { padding: 8px; }
+  .img-preview-guide { padding: 8px 12px; font-size: 11px; width: 160px; flex-shrink: 0; }
+}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a class="nav-logo" href="#" onclick="goToIntro(); return false;">
+    <div class="nav-logo-kr">
+      <span class="nav-logo-tag">CAMPAIGN</span>
+      여자라서 떼인 돈, 알려드립니다
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#" onclick="goToSection('calculator'); return false;">📊 계산하기</a>
+    <a href="#" onclick="goToSlide2(); showMainIfNeeded(); return false;">❓ 성별임금격차란?</a>
+  </div>
+  <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="메뉴 열기">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- 모바일 드로어 -->
+<div class="nav-drawer" id="nav-drawer">
+  <a href="#" onclick="goToSection('calculator'); closeMenu(); return false;">📊 계산하기</a>
+  <a href="#" onclick="openGapInfo(); closeMenu(); return false;">❓ 성별임금격차란?</a>
+</div>
+
+<!-- ══ HOST BANNER (주최 부제, nav와 중복 피해 슬림하게) ══ -->
+<div class="host-banner">
+  <div class="host-sub-row">
+    <span class="host-sub-prefix">주최</span>
+    <span class="host-org-tag">한국여성노동자회</span>
+    <span class="host-org-tag">전국여성노동조합</span>
+  </div>
+</div>
+
+<!-- ══ TICKER ══ -->
+<div class="ticker">
+  <span class="ticker-inner">⚡ 생계에 성별은 없다 &nbsp;&nbsp;⚡&nbsp;&nbsp; 우리의 노동이 보편이 될 때까지 &nbsp;&nbsp;⚡&nbsp;&nbsp; 임금 투명화 실현하라 &nbsp;&nbsp;⚡&nbsp;&nbsp;</span>
+</div>
+
+<!-- ══ INTRO WRAPPER ══ -->
+<div id="intro-wrapper">
+
+  <!-- SLIDE 1 -->
+  <div class="intro-slide active" id="slide-1">
+    <div class="slide1-window">
+      <!-- 좌측 동전 데코 -->
+      <svg class="slide1-coin coin-a" viewBox="0 0 60 60" aria-hidden="true">
+        <circle cx="30" cy="30" r="26" fill="#ffd54f" stroke="#ffb300" stroke-width="3"/>
+        <text x="30" y="40" text-anchor="middle" font-family="Noto Sans KR" font-size="28" font-weight="900" fill="#1a0a2e">₩</text>
+      </svg>
+      <svg class="slide1-coin coin-b" viewBox="0 0 60 60" aria-hidden="true">
+        <circle cx="30" cy="30" r="26" fill="#ffd54f" stroke="#ffb300" stroke-width="3"/>
+        <text x="30" y="40" text-anchor="middle" font-family="Noto Sans KR" font-size="28" font-weight="900" fill="#1a0a2e">₩</text>
+      </svg>
+      <div class="window-titlebar">
+        <div class="window-dots">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+        <button class="window-close" onclick="goToMain()" aria-label="인트로 닫기">×</button>
+      </div>
+      <div class="slide1-body">
+        <div class="slide1-title">'여자라서 떼인 돈'<br>여성노동자회X전국여성노동조합이<br><span style="color:var(--blk);">알려드립니다</span></div>
+        <div class="slide1-subtitle"><span style="color:var(--pur);font-weight:900;">여자라면! 누구나!</span> 일터에서! 매일!<br>강탈당하는 돈이 있다?</div>
+        <div class="slide1-desc">
+          1년에 얼마나 공짜로 일하고 계신가요?<br>
+          당신이 떼인 돈, 여기서 확인해보세요!
+        </div>
+        <button class="slide1-btn" onclick="goToSlide2()">
+          입장하기 <span class="arrow">▶</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="intro-slide" id="slide-2">
+    <div class="slide2-window">
+      <div class="window-titlebar">
+        <div class="window-dots">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+        <button class="window-close" onclick="goToMain()" aria-label="인트로 닫기">×</button>
+      </div>
+      <div class="slide2-body">
+        <div class="slide2-eyebrow">⚡ 충격적 사실</div>
+        <div class="slide2-title">성별임금격차 <span class="gap-num">29%</span></div>
+        <div class="slide2-content">
+          <div class="chart-area">
+            <div class="clock-bubble-wrap">
+              <!-- 왼쪽 보라 말풍선 -->
+              <div class="clock-bubble">
+                <div class="bubble-badge">2025년 기준</div>
+                한국의 성별 임금 격차는 <strong>29.0%</strong>,<br>
+                OECD 가입 이래로 성별임금격차지수<br>
+                <strong>29년째 부동의 1위💢</strong>
+              </div>
+              <!-- 시계 -->
+              <svg class="wage-clock" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="9시부터 6시 근무 중 3시 이후가 무급으로 표시된 시계">
+                <circle cx="110" cy="110" r="100" fill="#fff" stroke="#1a0a2e" stroke-width="4"/>
+                <path d="M 110 110 L 10 110 A 100 100 0 0 1 210 110 Z" fill="rgba(157,59,242,.15)"/>
+                <path d="M 110 110 L 210 110 A 100 100 0 0 1 110 210 Z" fill="rgba(231,76,60,.78)"/>
+                <path d="M 110 110 L 110 210 A 100 100 0 0 1 10 110 Z" fill="#f8f2ff"/>
+                <text x="110" y="32" text-anchor="middle" font-family="Noto Sans KR" font-size="16" font-weight="900" fill="#1a0a2e">12</text>
+                <text x="190" y="116" text-anchor="middle" font-family="Noto Sans KR" font-size="16" font-weight="900" fill="#fff">3</text>
+                <text x="110" y="200" text-anchor="middle" font-family="Noto Sans KR" font-size="16" font-weight="900" fill="#1a0a2e">6</text>
+                <text x="28" y="116" text-anchor="middle" font-family="Noto Sans KR" font-size="16" font-weight="900" fill="#1a0a2e">9</text>
+                <line x1="110" y1="110" x2="110" y2="55" stroke="#1a0a2e" stroke-width="4" stroke-linecap="round"/>
+                <line x1="110" y1="110" x2="170" y2="110" stroke="#e74c3c" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="110" cy="110" r="6" fill="#1a0a2e"/>
+                <text x="55" y="80" text-anchor="middle" font-family="Noto Sans KR" font-size="11" font-weight="900" fill="#7a5fa0">유급</text>
+                <text x="158" y="160" text-anchor="middle" font-family="Noto Sans KR" font-size="11" font-weight="900" fill="#fff">무급</text>
+              </svg>
+              <!-- 오른쪽 빨간 말풍선 (무급 구역 바깥) -->
+              <div class="unpaid-outer-bubble">
+                매일 오후 3시부터<br><strong>공짜 노동! 🔥</strong>
+              </div>
+            </div><!-- /clock-bubble-wrap -->
+
+          </div>
+          <div class="slide2-text">
+            <div class="slide2-text-main">
+              남성이 <strong>100만원</strong> 받을 때<br>
+              여성은 <strong class="text-accent">71만원</strong>만 받습니다.<br><br>
+              여성은 매일 <strong class="text-red">오후 3시부터</strong><br>
+              월급 없이 일하고 있는 셈이에요.<br><br>
+              <strong>1년이면 얼마일까요?</strong>
+            </div>
+            <button class="slide2-enter-btn" onclick="goToMain()">
+              ▶ 내 떼인 돈 계산하기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /intro-wrapper -->
+
+<!-- ══ MAIN SITE ══ -->
+<div id="main-site">
+
+  <!-- CALCULATOR -->
+  <div class="calc-section-wrap" id="calculator">
+    <div class="calc-heading-wrap">
+      <div class="gap-explain-bar">
+        <span class="gap-explain-badge">성별임금격차란?</span>
+        <span class="gap-explain-text">같은 일을 해도 <strong>'여성은 남성보다 평균 29% 낮은 임금'</strong>을 받습니다. 여성이라서 이유 없이 빼앗긴 그 돈, 지금 바로 확인해보세요.</span>
+      </div>
+      <h2 class="section-title" style="margin-top: 0;">여성이라서 빼앗긴 내 임금 계산하기</h2>
+      <p class="section-desc">월급과 노동시간을 입력하면 성별임금격차 29% 기준으로 빼앗긴 돈을 자동 계산합니다.</p>
+    </div>
+    <div class="calc-card">
+      <div class="divider-pixel"></div>
+      <div class="calc-grid">
+        <div class="input-panel">
+          <div class="panel-label">INPUT — 급여 정보</div>
+          <div class="field">
+            <label>A. 1개월 급여 (세후)</label>
+            <div class="field-row">
+              <input type="text" inputmode="numeric" id="salary" placeholder="예) 2,500,000" autocomplete="off">
+              <span class="unit">원</span>
+            </div>
+            <div class="err" id="sal-err">⚠ 금액을 입력해주세요</div>
+          </div>
+          <div class="field">
+            <label>B. 1개월 노동시간 <span style="font-size:12px; font-weight:400; color:#333; letter-spacing:0;">(시간 수정 가능)</span></label>
+            <div class="field-row">
+              <input type="number" id="hours" value="209" min="1" inputmode="numeric">
+              <span class="unit">시간</span>
+            </div>
+            <div class="hint">기본값 209시간 (주 40시간 기준)</div>
+            <div class="err" id="hrs-err">⚠ 노동시간을 입력해주세요</div>
+          </div>
+          <div class="formula-box">
+            <div class="formula-title">FORMULA — 9 TO 6 기준</div>
+            <div class="formula-row">
+              <span class="formula-lbl">하루 떼인 돈</span>
+              <span class="formula-val">(A÷B) × 3시간</span>
+            </div>
+            <div class="formula-row">
+              <span class="formula-lbl">한 달 떼인 돈</span>
+              <span class="formula-val">하루 × 22일</span>
+            </div>
+            <div class="formula-row">
+              <span class="formula-lbl">1년 누적 떼인 돈</span>
+              <span class="formula-val">한달 × 12개월</span>
+            </div>
+          </div>
+          <button class="calc-btn" onclick="doCalc()">▶ 떼인 돈 계산하기</button>
+        </div>
+        <div class="result-panel">
+          <div id="result-empty" class="result-empty">
+            <p>급여 정보를 입력하고<br>계산 버튼을<br>누르세요</p>
+          </div>
+          <div class="rboxes" id="rboxes">
+            <div class="panel-label" style="margin-bottom:16px;">RESULT — 성별임금격차로 빼앗긴 돈</div>
+            <!-- 핵심 금액 2개 -->
+            <div class="rbox-grid">
+              <div class="rbox"><div class="rbox-lbl">한 달 빼앗긴 돈</div><div class="rbox-val" id="r-m">—</div><div class="rbox-sub">하루 × 22일</div></div>
+              <div class="rbox big"><div class="rbox-lbl">1년 누적 빼앗긴 돈</div><div class="rbox-val" id="r-y">—</div><div class="rbox-sub">한달 × 12개월</div></div>
+            </div>
+            <!-- 숨겨진 값 (submitCalc 등에서 사용) -->
+            <span id="r-h" style="display:none">—</span>
+            <span id="r-d" style="display:none">—</span>
+            <span id="r-5y" style="display:none">—</span>
+            <!-- 성별임금격차 설명 그래픽 -->
+            <div class="gap-graphic" id="gap-graphic" style="display:none;">
+              <div class="gap-graphic-title">왜 내 돈이 빼앗겼을까?</div>
+              <div class="gap-graphic-body">
+                <div class="gap-bar-wrap">
+                  <div class="gap-bar-row">
+                    <span class="gap-bar-lbl">남성 임금</span>
+                    <div class="gap-bar-track"><div class="gap-bar-fill male">100</div></div>
+                    <span class="gap-bar-pct">100%</span>
+                  </div>
+                  <div class="gap-bar-row">
+                    <span class="gap-bar-lbl">여성 임금</span>
+                    <div class="gap-bar-track"><div class="gap-bar-fill female">71</div></div>
+                    <span class="gap-bar-pct gap-pct-red">71%</span>
+                  </div>
+                </div>
+                <div class="gap-graphic-desc">
+                  한국 성별임금격차 <strong>29%</strong> — OECD 회원국 중 가장 높은 수치, 29년째 1위💢<br>
+                  <span class="gap-graphic-sub">여성은 매일 <strong>오후 3시부터</strong> 임금 없이 일하는 셈</span>
+                </div>
+              </div>
+            </div>
+            <!-- 해시태그 공유 버튼 -->
+            <div class="share-tag-box" id="share-tag-box" style="display:none;">
+              <div class="share-tag-title">📢 함께 알려주세요!</div>
+              <div class="share-tag-chips">
+                <span class="share-chip">#여자라서떼인돈</span>
+                <span class="share-chip">#성별임금격차해소</span>
+                <span class="share-chip">#생계에성별은없다</span>
+                <span class="share-chip">#임금투명화실현하라</span>
+              </div>
+              <button class="share-copy-btn" onclick="copyShareText()">📋 해시태그+결과내용 한 번에 복사</button>
+              <button class="share-img-btn" onclick="saveResultImage()">🖼️ 이미지로 저장하기</button>
+              <div class="share-copied-msg" id="share-copied-msg">✔ 복사됐어요! SNS에 붙여넣기 하세요 🔥</div>
+              <div class="share-img-msg" id="share-img-msg">✔ 이미지 저장 완료! 📸</div>
+            </div>
+            <div class="submit-area" id="submit-area">
+              <div class="submit-note">이 결과를 익명으로 제출하면 다른 여성노동자들의 떼인돈과 함께 집계됩니다.</div>
+              <button class="calc-btn" id="sub-btn" onclick="submitCalc()">제출하기</button>
+            </div>
+            <div class="success-banner" id="success-banner">
+              <div class="success-banner-title">✔ 제출 완료</div>
+              <div class="success-banner-body" id="success-banner-body"></div>
+            </div>
+            <div class="action-btns" id="action-btns" style="display:none;">
+              <button class="action-btn-dash" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'})">다른 사람들은 어떨까? 👀</button>
+              <button class="action-btn-board" onclick="document.getElementById('board').scrollIntoView({behavior:'smooth'})">분노의 한마디 남기기! 🔥</button>
+            </div>
+            <button class="ghost-btn" onclick="resetCalc()">← 다시 계산</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="padding-bottom:64px;"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <div class="section">
+      <div class="dash-header-row">
+        <div>
+          <h2 class="section-title" style="color:#fff;margin-top:0;">우리의 빼앗긴 임금</h2>
+          <p class="section-desc" style="color:#9d8ac0;font-size:20px;">여러분이 제출한 '떼인 돈' 데이터를 실시간으로 집계합니다.</p>
+        </div>
+        <div class="tool-tray tool-tray-dark">
+          <div class="window-dots">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+          </div>
+          <button class="tool-tray-btn" onclick="loadDash()">↺ 새로고침</button>
+        </div>
+      </div>
+      <div id="dash-content"><div class="dash-loading">LOADING</div></div>
+    </div>
+  </div>
+
+  <!-- BOARD -->
+  <div id="board" style="background:#fff;">
+    <div class="section">
+      <div class="board-heading">
+        <h2 class="section-title" style="margin-top:0;">떼인 돈 내놔라!</h2>
+        <p class="section-desc">불평등한 현실에 하고 싶은 말을 남겨주세요. 여러분의 목소리가 모여 변화를 만듭니다.</p>
+      </div>
+      <div class="postit-form">
+        <div class="postit-form-title">✏ 사회에 요구하는 한마디를 써주세요</div>
+        <div class="nick-row">
+          <span class="nick-label">닉네임</span>
+          <input class="nick-input" type="text" id="nickname" placeholder="예) 30세 페미노동자" maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <textarea id="voice" placeholder="예) 같은 일을 하는데 왜 내 급여는 달라야 하나요? / 임금 차별 이제 그만! / 성평등 임금 공시제 도입하라!" maxlength="200" autocorrect="off" autocapitalize="sentences" spellcheck="false" rows="4"></textarea>
+        <div class="form-footer">
+          <span class="char-count" id="char-count">0 / 200자</span>
+          <button class="post-btn" id="post-btn" onclick="submitVoice()">게시판에 붙이기 📌</button>
+        </div>
+        <div class="post-err" id="post-err">⚠ 내용을 입력해주세요 (최소 5자)</div>
+        <div class="post-ok" id="post-ok">✔ 게시판에 붙였습니다!</div>
+      </div>
+      <div class="board-meta">
+        <span class="board-count" id="board-count"></span>
+        <div class="tool-tray">
+          <div class="window-dots">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+          </div>
+          <div id="admin-bar"></div>
+          <button class="tool-tray-btn" onclick="loadBoard()">↺ 새로고침</button>
+        </div>
+      </div>
+      <div class="postit-grid" id="postit-grid">
+        <div class="postit-loading">LOADING</div>
+      </div>
+
+      <!-- 관리자 전체 데이터 뷰어 -->
+      <div id="admin-data-panel" style="display:none; margin-top:48px; background:var(--pur5); border:2px solid var(--pur4); border-radius:16px; padding:28px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+          <h3 style="font-family:var(--kr); font-size:18px; font-weight:900; color:var(--pur2);">📊 관리자 데이터 뷰어</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="showAdminTab('posts')" id="atab-posts" class="atab atab-active">포스트잇 전체</button>
+            <button onclick="showAdminTab('calc')" id="atab-calc" class="atab">집계 데이터</button>
+          </div>
+        </div>
+        <div id="admin-posts-view"></div>
+        <div id="admin-calc-view" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-orgs-row">
+      <!-- 한국여성노동자회 -->
+      <div class="footer-org-block">
+        <a class="footer-hotline" href="tel:16701611">📞 여성노동자회 평등의전화 1670-1611</a>
+        <div class="footer-org-name">한국여성노동자회</div>
+        <details class="footer-units-details">
+          <summary>전국 11개 지부 보기 <span class="caret">▾</span></summary>
+          <div class="footer-org-units">
+            <a class="fu-tag" href="https://equaline.or.kr/" target="_blank" rel="noopener noreferrer">서울여성노동자회</a>
+            <a class="fu-tag" href="http://www.womenworker.or.kr/" target="_blank" rel="noopener noreferrer">인천여성노동자회</a>
+            <a class="fu-tag" href="https://blog.naver.com/swwa33" target="_blank" rel="noopener noreferrer">수원여성노동자회</a>
+            <a class="fu-tag" href="https://ansanww.org/" target="_blank" rel="noopener noreferrer">안산여성노동자회</a>
+            <a class="fu-tag" href="https://blog.naver.com/pwwa22" target="_blank" rel="noopener noreferrer">부천여성노동자회</a>
+            <a class="fu-tag" href="https://jwunion.org/" target="_blank" rel="noopener noreferrer">전북여성노동자회</a>
+            <a class="fu-tag" href="http://www.gjwwa.or.kr/" target="_blank" rel="noopener noreferrer">광주여성노동자회</a>
+            <a class="fu-tag" href="https://mcwwa.imweb.me/xdy68utl" target="_blank" rel="noopener noreferrer">마산창원여성노동자회</a>
+            <a class="fu-tag" href="http://www.busanwomen.or.kr/women/main/main.php" target="_blank" rel="noopener noreferrer">부산여성회</a>
+            <a class="fu-tag" href="http://gjwwa.kr/" target="_blank" rel="noopener noreferrer">경주여성노동자회</a>
+            <a class="fu-tag" href="https://dgwwo.campaignus.me/" target="_blank" rel="noopener noreferrer">대구여성노동자회</a>
+          </div>
+        </details>
+        <div class="footer-org-contact">
+          Tel. 02-325-6822 &nbsp;|&nbsp; kwwa@daum.net
+        </div>
+        <div class="footer-sns-row">
+          <a href="https://kwwnet.org" target="_blank">공식 홈페이지</a>
+          <a href="https://www.youtube.com/@kwwnet" target="_blank">유튜브</a>
+          <a href="https://www.instagram.com/kwwa1987" target="_blank">인스타그램</a>
+          <a href="https://x.com/kwwnet" target="_blank" rel="noopener noreferrer">트위터</a>
+          <a href="https://www.facebook.com/kwwa1987" target="_blank">페이스북</a>
+        </div>
+      </div>
+
+      <!-- 전국여성노동조합 -->
+      <div class="footer-org-block">
+        <a class="footer-hotline" href="tel:16441884">📞 전국여성노동조합 여성노동상담 1644-1884</a>
+        <div class="footer-org-name">전국여성노동조합</div>
+        <div class="footer-org-contact">
+          전화 : 02-336-6377<br>
+          팩스 : 02-336-6246<br>
+          이메일 : kwtu@daum.net
+        </div>
+        <div class="footer-sns-row">
+          <a href="https://kwtu.or.kr" target="_blank">공식 홈페이지</a>
+          <a href="https://www.youtube.com/channel/UCZSIpSXWmSkVXUNLFVv94qQ" target="_blank">유튜브</a>
+          <a href="https://www.instagram.com/kwtu1999/" target="_blank">인스타그램</a>
+          <a href="https://twitter.com/kw_union" target="_blank" rel="noopener noreferrer">트위터</a>
+          <a href="https://www.facebook.com/kwtu99" target="_blank">페이스북</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-copy">ⓒ 한국여성노동자회</div>
+  </footer>
+
+</div><!-- /main-site -->
+
+<!-- 공통 알림/확인/입력 모달 (alert/confirm/prompt 대체) -->
+<div id="app-modal" class="app-modal" onclick="appModalBackdrop(event)">
+  <div class="app-modal-box" role="dialog" aria-modal="true" aria-labelledby="app-modal-title">
+    <div class="app-modal-icon" id="app-modal-icon">⚡</div>
+    <div class="app-modal-title" id="app-modal-title">알림</div>
+    <div class="app-modal-body" id="app-modal-body"></div>
+    <div class="app-modal-input-wrap" id="app-modal-input-wrap">
+      <input id="app-modal-input" class="app-modal-input" type="text">
+    </div>
+    <div class="app-modal-actions">
+      <button type="button" id="app-modal-cancel" class="app-modal-cancel">취소</button>
+      <button type="button" id="app-modal-ok" class="app-modal-ok">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 관리자 로그인 모달 -->
+<div id="admin-login-modal" class="admin-login-modal" onclick="adminLoginBackdrop(event)">
+  <div class="admin-login-box" role="dialog" aria-modal="true" aria-labelledby="admin-login-title">
+    <div class="admin-login-title" id="admin-login-title">관리자 로그인</div>
+    <div class="admin-login-desc">관리자 아이디를 입력하면 데이터 보기·수정·삭제 기능이 열립니다.</div>
+    <input id="admin-login-id" class="admin-login-input" type="text" placeholder="관리자 아이디" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <div id="admin-login-error" class="admin-login-error">아이디가 올바르지 않습니다.</div>
+    <div class="admin-login-actions">
+      <button type="button" class="admin-login-cancel" onclick="closeAdminLogin()">취소</button>
+      <button type="button" class="admin-login-submit" onclick="submitAdminLogin()">로그인</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─── 공통 헬퍼 ─────────────────────── */
+function pad2(n){ return (n<10?'0':'')+n; }
+function fmtDate(d){
+  return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+' '+pad2(d.getHours())+':'+pad2(d.getMinutes());
+}
+function fmtDateShort(d){
+  return pad2(d.getMonth()+1)+'/'+pad2(d.getDate())+' '+pad2(d.getHours())+':'+pad2(d.getMinutes());
+}
+
+/* ─── 보라 톤 alert/confirm/prompt ─── */
+function _appModalSetup(opts){
+  var m = document.getElementById('app-modal');
+  document.getElementById('app-modal-icon').textContent = opts.icon || 'ℹ️';
+  document.getElementById('app-modal-title').textContent = opts.title || '알림';
+  document.getElementById('app-modal-body').innerHTML = (opts.message || '').replace(/\n/g,'<br>');
+  return m;
+}
+function showAlert(message, opts){
+  opts = opts || {};
+  return new Promise(function(resolve){
+    var m = _appModalSetup({icon: opts.icon || 'ℹ️', title: opts.title || '알림', message: message});
+    document.getElementById('app-modal-input-wrap').style.display = 'none';
+    var ok = document.getElementById('app-modal-ok');
+    var cancel = document.getElementById('app-modal-cancel');
+    cancel.style.display = 'none';
+    ok.textContent = opts.okText || '확인';
+    ok.className = 'app-modal-ok' + (opts.danger ? ' danger' : '');
+    function close(){
+      m.classList.remove('show');
+      ok.onclick = null; document.onkeydown = null;
+      resolve();
+    }
+    ok.onclick = close;
+    document.onkeydown = function(e){ if(e.key==='Escape'||e.key==='Enter') close(); };
+    m.classList.add('show');
+    setTimeout(function(){ ok.focus(); }, 60);
+  });
+}
+function showConfirm(message, opts){
+  opts = opts || {};
+  return new Promise(function(resolve){
+    var m = _appModalSetup({icon: opts.icon || '❓', title: opts.title || '확인', message: message});
+    document.getElementById('app-modal-input-wrap').style.display = 'none';
+    var ok = document.getElementById('app-modal-ok');
+    var cancel = document.getElementById('app-modal-cancel');
+    cancel.style.display = '';
+    cancel.textContent = opts.cancelText || '취소';
+    ok.textContent = opts.okText || '확인';
+    ok.className = 'app-modal-ok' + (opts.danger ? ' danger' : '');
+    function close(result){
+      m.classList.remove('show');
+      ok.onclick = null; cancel.onclick = null; document.onkeydown = null;
+      resolve(result);
+    }
+    cancel.onclick = function(){ close(false); };
+    ok.onclick = function(){ close(true); };
+    document.onkeydown = function(e){
+      if(e.key==='Escape') close(false);
+      if(e.key==='Enter') close(true);
+    };
+    m.classList.add('show');
+    setTimeout(function(){ ok.focus(); }, 60);
+  });
+}
+function showPrompt(message, defaultValue, opts){
+  opts = opts || {};
+  return new Promise(function(resolve){
+    var m = _appModalSetup({icon: opts.icon || '✏️', title: opts.title || '입력', message: message});
+    var wrap = document.getElementById('app-modal-input-wrap');
+    var input = document.getElementById('app-modal-input');
+    wrap.style.display = 'block';
+    input.value = defaultValue || '';
+    var ok = document.getElementById('app-modal-ok');
+    var cancel = document.getElementById('app-modal-cancel');
+    cancel.style.display = '';
+    cancel.textContent = '취소';
+    ok.textContent = '저장';
+    ok.className = 'app-modal-ok';
+    function close(result){
+      m.classList.remove('show');
+      ok.onclick = null; cancel.onclick = null; input.onkeydown = null; document.onkeydown = null;
+      resolve(result);
+    }
+    cancel.onclick = function(){ close(null); };
+    ok.onclick = function(){ close(input.value); };
+    input.onkeydown = function(e){
+      if(e.key==='Enter'){ e.preventDefault(); close(input.value); }
+      if(e.key==='Escape') close(null);
+    };
+    m.classList.add('show');
+    setTimeout(function(){ input.focus(); input.select(); }, 60);
+  });
+}
+function appModalBackdrop(e){
+  if(e.target && e.target.id==='app-modal'){
+    var cancel = document.getElementById('app-modal-cancel');
+    if(cancel.onclick) cancel.onclick();
+    else {
+      var ok = document.getElementById('app-modal-ok');
+      if(ok.onclick) ok.onclick();
+    }
+  }
+}
+
+/* ── HAMBURGER MENU ── */
+function toggleMenu(){
+  var h=document.getElementById('hamburger');
+  var d=document.getElementById('nav-drawer');
+  h.classList.toggle('open');
+  d.classList.toggle('open');
+}
+function closeMenu(){
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('nav-drawer').classList.remove('open');
+}
+
+/* ── SLIDE NAVIGATION ── */
+function goToSlide2(){
+  document.getElementById('slide-1').classList.remove('active');
+  document.getElementById('slide-2').classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function goToMain(){
+  document.getElementById('intro-wrapper').style.display='none';
+  var ms=document.getElementById('main-site');
+  ms.classList.add('show');
+  loadDash();
+  loadBoard();
+  setTimeout(function(){
+    var calc=document.getElementById('calculator');
+    if(calc) calc.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 100);
+}
+function goToSection(sectionId){
+  var iw=document.getElementById('intro-wrapper');
+  var ms=document.getElementById('main-site');
+  if(iw.style.display!=='none'){
+    iw.style.display='none';
+    ms.classList.add('show');
+    loadDash();
+    loadBoard();
+  }
+  setTimeout(function(){
+    var el=document.getElementById(sectionId);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 120);
+}
+
+
+/* ── PUBLIC STORAGE HELPER ──
+   window.storage가 없는 일반 배포 환경(Vercel/GitHub Pages 등)에서도
+   로그인 없이 제출이 되도록 localStorage로 자동 대체합니다.
+   window.storage가 있는 환경에서는 기존 공용 저장소를 그대로 사용합니다. */
+/* ── 공용 스토리지: BIN ID 고정 → 모든 기기에서 하나로 집계 ── */
+var JSONBIN_KEY = '$2a$10$xgs2TfXR2pjg0p68cSGKAuQUwe7fd59GK3Hkzy5jMRT59kgHKxa4m';
+var JSONBIN_BIN_ID = '6a0579d8adc21f119a9a8826'; // 고정 BIN ID
+
+var publicStore = {
+  async get(key){
+    // 1순위: Claude Artifacts 공용 스토리지
+    if(window.storage && typeof window.storage.get === 'function'){
+      return await window.storage.get(key, true);
+    }
+    // 2순위: JSONBin.io 고정 BIN (모든 기기 공유)
+    try {
+      var res = await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID + '/latest', {
+        headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
+      });
+      if(!res.ok) throw new Error('fetch fail');
+      var data = await res.json();
+      var record = data.record || data;
+      var val = record[key];
+      if(val === undefined) return null;
+      return { value: typeof val === 'string' ? val : JSON.stringify(val) };
+    } catch(e) {
+      // fallback: localStorage
+      var v = localStorage.getItem(key);
+      return v === null ? null : { value: v };
+    }
+  },
+  async set(key, value, isPublic){
+    // 1순위: Claude Artifacts
+    if(window.storage && typeof window.storage.set === 'function'){
+      return await window.storage.set(key, value, true);
+    }
+    // 2순위: JSONBin.io 고정 BIN 업데이트
+    try {
+      var parsed;
+      try { parsed = JSON.parse(value); } catch(e){ parsed = value; }
+      // 현재 데이터 읽기
+      var getRes = await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID + '/latest', {
+        headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
+      });
+      var existing = {};
+      if(getRes.ok){
+        var gd = await getRes.json();
+        existing = gd.record || gd || {};
+      }
+      existing[key] = parsed;
+      // 저장
+      await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': JSONBIN_KEY
+        },
+        body: JSON.stringify(existing)
+      });
+      return { ok: true };
+    } catch(e) {
+      // fallback: localStorage
+      localStorage.setItem(key, value);
+      return { ok: true };
+    }
+  }
+};
+
+/* ── CALC ── */
+var calcResult=null, calcSubmitted=false;
+function fmt(n){ return Math.round(n).toLocaleString('ko-KR')+'원'; }
+function fmtS(n){
+  if(n>=100000000) return (n/100000000).toFixed(1)+'억';
+  if(n>=10000) return Math.round(n/10000)+'만';
+  return Math.round(n).toLocaleString('ko-KR');
+}
+
+/* 급여 입력 콤마 처리 */
+var salaryRaw=0;
+document.getElementById('salary').addEventListener('input',function(){
+  var v=this.value.replace(/[^0-9]/g,'');
+  salaryRaw=v?parseInt(v,10):0;
+  this.value=salaryRaw?salaryRaw.toLocaleString('ko-KR'):'';
+});
+document.getElementById('salary').addEventListener('keydown',function(e){
+  if(e.key==='Backspace'||e.key==='Delete'||e.key==='Tab'||e.key==='Enter'||e.key==='ArrowLeft'||e.key==='ArrowRight') return;
+  if(!/[0-9]/.test(e.key)) e.preventDefault();
+});
+
+function doCalc(){
+  var s=salaryRaw;
+  var h=parseFloat(document.getElementById('hours').value);
+  document.getElementById('sal-err').style.display='none';
+  document.getElementById('hrs-err').style.display='none';
+  var ok=true;
+  if(!s||s<=0){document.getElementById('sal-err').style.display='block';ok=false;}
+  if(!h||h<=0){document.getElementById('hrs-err').style.display='block';ok=false;}
+  if(!ok) return;
+  var hr=s/h,d=hr*3,m=d*22,y=m*12,y5=m*60;
+  calcResult={salary:s,hours:h,hourly:hr,daily:d,monthly:m,yearly:y,y5:y5};
+  document.getElementById('r-h').textContent=fmt(hr);
+  document.getElementById('r-d').textContent=fmt(d);
+  document.getElementById('r-m').textContent=fmt(m);
+  document.getElementById('r-y').textContent=fmt(y);
+  document.getElementById('r-5y').textContent=fmt(y5);
+  document.getElementById('result-empty').style.display='none';
+  document.getElementById('rboxes').classList.add('show');
+  if(!calcSubmitted) document.getElementById('submit-area').classList.add('show');
+  // 성별임금격차 그래픽 + 공유박스 표시
+  document.getElementById('gap-graphic').style.display='block';
+  document.getElementById('share-tag-box').style.display='block';
+  setTimeout(function(){document.getElementById('rboxes').scrollIntoView({behavior:'smooth',block:'center'});},60);
+}
+async function submitCalc(){
+  if(!calcResult) return;
+  var btn=document.getElementById('sub-btn');
+  btn.disabled=true; btn.textContent='제출 중...';
+  try{
+    var ex=null; try{ex=await publicStore.get('kww-subs');}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    list.push({ts:Date.now(),salary:Math.round(calcResult.salary),hours:Math.round(calcResult.hours),yearly:Math.round(calcResult.yearly),monthly:Math.round(calcResult.monthly)});
+    await publicStore.set('kww-subs',JSON.stringify(list),true);
+    calcSubmitted=true;
+    document.getElementById('submit-area').classList.remove('show');
+    // 개인화 메시지 채우기
+    var ys=list.map(function(x){return x.yearly;});
+    var avg=Math.round(ys.reduce(function(a,b){return a+b;},0)/ys.length);
+    var myY=Math.round(calcResult.yearly);
+    var diff=myY-avg;
+    var diffMsg=diff>0
+      ? '평균보다 <strong>'+fmtS(Math.abs(diff))+'원</strong> 더 떼였어요.'
+      : (diff<0 ? '평균보다 <strong>'+fmtS(Math.abs(diff))+'원</strong> 적게 떼였어요.' : '평균과 비슷한 수준이에요.');
+    var bodyEl=document.getElementById('success-banner-body');
+    if(bodyEl){
+      bodyEl.innerHTML =
+        '당신의 <strong>'+fmtS(myY)+'원</strong>이 <strong>'+list.length+'명</strong>의 평균계산에 더해졌습니다.<br>' +
+        '현재 평균 연간 떼인 돈: <strong>'+fmtS(avg)+'원</strong> · '+diffMsg;
+    }
+    document.getElementById('success-banner').classList.add('show');
+    document.getElementById('action-btns').style.display='flex';
+    loadDash();
+    if(currentAdmin && document.getElementById('admin-data-panel') && document.getElementById('admin-data-panel').style.display !== 'none') renderAdminCalc();
+  }catch(e){
+    btn.disabled=false; btn.textContent='제출하기';
+    showAlert('오류가 발생했습니다. 다시 시도해주세요.', {icon:'⚠️', title:'제출 실패'});
+  }
+}
+function resetCalc(){
+  document.getElementById('salary').value='';
+  salaryRaw=0;
+  document.getElementById('hours').value='209';
+  document.getElementById('result-empty').style.display='';
+  document.getElementById('rboxes').classList.remove('show');
+  document.getElementById('submit-area').classList.remove('show');
+  document.getElementById('success-banner').classList.remove('show');
+  document.getElementById('action-btns').style.display='none';
+  calcResult=null; calcSubmitted=false;
+  document.getElementById('gap-graphic').style.display='none';
+  document.getElementById('share-tag-box').style.display='none';
+  var msg=document.getElementById('share-copied-msg');
+  if(msg) msg.classList.remove('show');
+}
+
+/* ── DASHBOARD ── */
+async function loadDash(){
+  var el=document.getElementById('dash-content');
+  if(!el) return;
+  el.innerHTML='<div class="dash-loading">LOADING</div>';
+  try{
+    var ex=null; try{ex=await publicStore.get('kww-subs');}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    if(list.length===0){el.innerHTML='<div class="dash-empty">아직 제출된 데이터가 없습니다.<br>첫 번째로 계산하고 제출해주세요!</div>';return;}
+    renderDash(el,list);
+  }catch(e){el.innerHTML='<div class="dash-empty">불러오기 실패</div>';}
+}
+function renderDash(el,list){
+  var ys=list.map(function(x){return x.yearly;});
+  var avg=ys.reduce(function(a,b){return a+b;},0)/ys.length;
+  var mx=Math.max.apply(null,ys);
+  var br=[
+    {l:'~ 500만',min:0,max:5e6,c:0},
+    {l:'500만 ~ 1천만',min:5e6,max:1e7,c:0},
+    {l:'1천만 ~ 2천만',min:1e7,max:2e7,c:0},
+    {l:'2천만 ~ 3천만',min:2e7,max:3e7,c:0},
+    {l:'3천만 이상',min:3e7,max:Infinity,c:0}
+  ];
+  ys.forEach(function(y){for(var i=0;i<br.length;i++){if(y>=br[i].min&&y<br[i].max){br[i].c++;break;}}});
+  var mc=Math.max.apply(null,br.map(function(b){return b.c;}));
+  var rec=list.slice().sort(function(a,b){return b.ts-a.ts;}).slice(0,8);
+  var h='<div class="dash-grid">';
+  h+='<div class="stat-card"><div class="stat-num">'+list.length+'</div><div class="stat-lbl">총 제출 수</div></div>';
+  h+='<div class="stat-card"><div class="stat-num">'+fmtS(avg)+'원</div><div class="stat-lbl">평균 연간 떼인 돈</div></div>';
+  h+='<div class="stat-card"><div class="stat-num">'+fmtS(mx)+'원</div><div class="stat-lbl">최대 연간 피해액</div></div>';
+  h+='</div><div class="chart-section"><div class="chart-title">연간 피해액 분포</div>';
+  br.forEach(function(b){
+    var p=mc>0?Math.round((b.c/mc)*100):0;
+    h+='<div class="bar-row"><div class="bar-lbl">'+b.l+'</div><div class="bar-track"><div class="bar-fill" style="width:'+p+'%"></div></div><div class="bar-cnt">'+b.c+'</div></div>';
+  });
+  h+='</div><div class="recent-title">최근 제출 내역 (익명)</div><div class="entries">';
+  rec.forEach(function(e){
+    var d=new Date(e.ts);
+    h+='<div class="entry"><span class="entry-val">연 '+fmtS(e.yearly)+'원 피해</span><span class="entry-time">'+fmtDateShort(d)+'</span></div>';
+  });
+  h+='</div>';
+  el.innerHTML=h;
+}
+
+/* ── BOARD ── */
+/* 관리자 아이디 목록 (소문자로 비교) */
+var ADMIN_IDS = ['kwwa_admin', 'kwtu_admin', 'manager2024'];
+var currentAdmin = null;
+
+document.getElementById('voice').addEventListener('input',function(){
+  document.getElementById('char-count').textContent=this.value.length+' / 200자';
+});
+
+/* 관리자 로그인 */
+function adminLogin(){
+  var modal=document.getElementById('admin-login-modal');
+  var input=document.getElementById('admin-login-id');
+  var err=document.getElementById('admin-login-error');
+  if(err) err.style.display='none';
+  if(input) input.value='';
+  if(modal) modal.classList.add('show');
+  setTimeout(function(){ if(input) input.focus(); }, 50);
+}
+function closeAdminLogin(){
+  var modal=document.getElementById('admin-login-modal');
+  if(modal) modal.classList.remove('show');
+}
+function adminLoginBackdrop(e){
+  if(e.target && e.target.id==='admin-login-modal') closeAdminLogin();
+}
+function submitAdminLogin(){
+  var input=document.getElementById('admin-login-id');
+  var err=document.getElementById('admin-login-error');
+  var id=input ? input.value : '';
+  if(ADMIN_IDS.indexOf(id.toLowerCase().trim()) !== -1){
+    currentAdmin = id.trim();
+    closeAdminLogin();
+    loadBoard();
+    setTimeout(openAdminPanel, 80);
+  } else {
+    if(err) err.style.display='block';
+    if(input) input.focus();
+  }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var input=document.getElementById('admin-login-id');
+  if(input){
+    input.addEventListener('keydown', function(e){
+      if(e.key==='Enter') submitAdminLogin();
+      if(e.key==='Escape') closeAdminLogin();
+    });
+  }
+});
+function adminLogout(){
+  currentAdmin = null;
+  document.getElementById('admin-data-panel').style.display='none';
+  loadBoard();
+}
+
+/* 관리자 탭 전환 */
+function showAdminTab(tab){
+  document.getElementById('admin-posts-view').style.display = tab==='posts'?'block':'none';
+  document.getElementById('admin-calc-view').style.display  = tab==='calc'?'block':'none';
+  document.getElementById('atab-posts').className = 'atab'+(tab==='posts'?' atab-active':'');
+  document.getElementById('atab-calc').className  = 'atab'+(tab==='calc'?' atab-active':'');
+  if(tab==='calc') renderAdminCalc();
+  if(tab==='posts') renderAdminPosts();
+}
+
+/* 관리자 포스트잇 전체 테이블 */
+async function renderAdminPosts(){
+  var el=document.getElementById('admin-posts-view');
+  el.innerHTML='<p style="color:#9d8ac0;font-size:13px;">불러오는 중...</p>';
+  try{
+    var ex=null; try{ex=await publicStore.get('kww-board');}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    if(list.length===0){el.innerHTML='<p style="color:#9d8ac0;font-size:13px;">데이터 없음</p>';return;}
+    var h='<div style="overflow-x:auto;">';
+    h+='<table class="admin-table"><thead><tr><th>#</th><th>날짜</th><th>닉네임</th><th>내용</th><th>삭제</th></tr></thead><tbody>';
+    list.forEach(function(item,i){
+      var d=new Date(item.ts);
+      h+='<tr><td>'+(i+1)+'</td><td style="white-space:nowrap;">'+fmtDate(d)+'</td><td>'+escHtml(item.nick||'익명')+'</td><td>'+escHtml(item.text)+'</td><td><button class="admin-del-row" onclick=\'deletePost('+jsArg(item.id)+')\'>삭제</button></td></tr>';
+    });
+    h+='</tbody></table></div>';
+    h+='<button class="admin-export-btn" onclick="exportCSV(\'board\')">📥 CSV 다운로드</button>';
+    el.innerHTML=h;
+  }catch(e){el.innerHTML='<p style="color:#e74c3c;">불러오기 실패</p>';}
+}
+
+/* 관리자 집계 데이터 전체 테이블 */
+async function renderAdminCalc(){
+  var el=document.getElementById('admin-calc-view');
+  el.innerHTML='<p style="color:#9d8ac0;font-size:13px;">불러오는 중...</p>';
+  try{
+    var ex=null; try{ex=await publicStore.get('kww-subs');}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    if(list.length===0){el.innerHTML='<p style="color:#9d8ac0;font-size:13px;">데이터 없음</p>';return;}
+    var total=list.length;
+    var avgY=Math.round(list.reduce(function(a,b){return a+b.yearly;},0)/total);
+    var maxY=Math.max.apply(null,list.map(function(x){return x.yearly;}));
+    var h='<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">';
+    h+='<div style="background:rgba(157,59,242,.1);border-radius:8px;padding:12px 18px;"><div style="font-size:11px;color:#9d8ac0;margin-bottom:4px;">총 제출</div><div style="font-size:20px;font-weight:900;color:var(--pur3);">'+total+'건</div></div>';
+    h+='<div style="background:rgba(157,59,242,.1);border-radius:8px;padding:12px 18px;"><div style="font-size:11px;color:#9d8ac0;margin-bottom:4px;">평균 연간 피해</div><div style="font-size:20px;font-weight:900;color:var(--pur3);">'+fmtS(avgY)+'원</div></div>';
+    h+='<div style="background:rgba(157,59,242,.1);border-radius:8px;padding:12px 18px;"><div style="font-size:11px;color:#9d8ac0;margin-bottom:4px;">최대 연간 피해</div><div style="font-size:20px;font-weight:900;color:var(--pur3);">'+fmtS(maxY)+'원</div></div>';
+    h+='</div>';
+    h+='<div style="overflow-x:auto;">';
+    h+='<table class="admin-table"><thead><tr><th>#</th><th>날짜</th><th>월급(세후)</th><th>노동시간</th><th>월 떼인돈</th><th>연 떼인돈</th><th>삭제</th></tr></thead><tbody>';
+    list.forEach(function(item,i){
+      var d=new Date(item.ts);
+      h+='<tr><td>'+(i+1)+'</td><td style="white-space:nowrap;">'+fmtDate(d)+'</td><td>'+Math.round(item.salary).toLocaleString('ko-KR')+'원</td><td>'+item.hours+'시간</td><td>'+Math.round(item.monthly).toLocaleString('ko-KR')+'원</td><td>'+Math.round(item.yearly).toLocaleString('ko-KR')+'원</td><td><button class="admin-del-row" onclick="deleteCalcRow('+i+')">삭제</button></td></tr>';
+    });
+    h+='</tbody></table></div>';
+    h+='<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">';
+    h+='<button class="admin-export-btn" onclick="exportCSV(\'calc\')">📥 CSV 다운로드</button>';
+    h+='<button class="admin-danger-btn" onclick="deleteAllCalc()">🗑 전체 데이터 삭제</button>';
+    h+='</div>';
+    el.innerHTML=h;
+  }catch(e){el.innerHTML='<p style="color:#e74c3c;">불러오기 실패</p>';}
+}
+
+/* 집계 데이터 개별 행 삭제 */
+async function deleteCalcRow(idx){
+  if(!currentAdmin) return;
+  var ok = await showConfirm((idx+1)+'번 데이터를 삭제할까요?', {icon:'🗑', title:'데이터 삭제', danger:true, okText:'삭제'});
+  if(!ok) return;
+  try{
+    var ex=null; try{ex=await publicStore.get('kww-subs');}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    list.splice(idx,1);
+    await publicStore.set('kww-subs',JSON.stringify(list),true);
+    renderAdminCalc();
+    loadDash();
+  }catch(e){showAlert('삭제에 실패했습니다.', {icon:'⚠️', title:'오류'});}
+}
+
+/* 집계 전체 삭제 */
+async function deleteAllCalc(){
+  if(!currentAdmin) return;
+  var ok = await showConfirm('집계 데이터를 전부 삭제합니다.\n복구할 수 없습니다.', {icon:'⚠️', title:'전체 삭제', danger:true, okText:'전부 삭제'});
+  if(!ok) return;
+  try{
+    await publicStore.set('kww-subs',JSON.stringify([]),true);
+    showAlert('전체 삭제 완료', {icon:'✅', title:'완료'});
+    renderAdminCalc();
+    loadDash();
+  }catch(e){showAlert('삭제에 실패했습니다.', {icon:'⚠️', title:'오류'});}
+}
+
+/* CSV 내보내기 */
+async function exportCSV(type){
+  try{
+    var key=type==='board'?'kww-board':'kww-subs';
+    var ex=null; try{ex=await publicStore.get(key);}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    var rows,header;
+    if(type==='board'){
+      header='번호,날짜,닉네임,내용';
+      rows=list.map(function(item,i){
+        var d=new Date(item.ts);
+        return (i+1)+',"'+fmtDate(d)+'","'+String(item.nick||'익명').replace(/"/g,'""')+'","'+String(item.text||'').replace(/"/g,'""')+'"';
+      });
+    } else {
+      header='번호,날짜,월급(세후),노동시간,월떼인돈,연떼인돈';
+      rows=list.map(function(item,i){
+        var d=new Date(item.ts);
+        return (i+1)+',"'+fmtDate(d)+'",'+Math.round(item.salary)+','+item.hours+','+Math.round(item.monthly)+','+Math.round(item.yearly);
+      });
+    }
+    var csv='\uFEFF'+header+'\n'+rows.join('\n');
+    var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download=(type==='board'?'포스트잇_데이터':'집계_데이터')+'_'+new Date().toLocaleDateString('ko-KR').replace(/\./g,'').replace(/ /g,'')+'.csv';
+    a.style.display='none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
+  }catch(e){showAlert('다운로드에 실패했습니다.\n'+e.message, {icon:'⚠️', title:'오류'});}
+}
+
+async function submitVoice(){
+  var txt=document.getElementById('voice').value.trim();
+  var nick=document.getElementById('nickname').value.trim()||'익명';
+  document.getElementById('post-err').style.display='none';
+  document.getElementById('post-ok').style.display='none';
+  if(txt.length<5){document.getElementById('post-err').style.display='block';return;}
+  var btn=document.getElementById('post-btn');
+  btn.disabled=true; btn.textContent='게시 중...';
+  try{
+    var ex=null; try{ex=await publicStore.get('kww-board');}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    var id='post_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+    list.unshift({id:id,ts:Date.now(),text:txt,nick:nick});
+    if(list.length>200) list=list.slice(0,200);
+    await publicStore.set('kww-board',JSON.stringify(list),true);
+    document.getElementById('voice').value='';
+    document.getElementById('nickname').value='';
+    document.getElementById('char-count').textContent='0 / 200자';
+    document.getElementById('post-ok').style.display='block';
+    loadBoard();
+    if(currentAdmin && document.getElementById('admin-data-panel') && document.getElementById('admin-data-panel').style.display !== 'none') renderAdminPosts();
+  }catch(e){
+    document.getElementById('post-err').style.display='block';
+    document.getElementById('post-err').textContent='⚠ 오류가 발생했습니다. 다시 시도해주세요.';
+  }finally{
+    btn.disabled=false; btn.textContent='게시판에 붙이기 📌';
+  }
+}
+
+async function deletePost(postId){
+  if(!currentAdmin) return;
+  var ok = await showConfirm('이 포스트잇을 삭제할까요?', {icon:'🗑', title:'포스트잇 삭제', danger:true, okText:'삭제'});
+  if(!ok) return;
+  try{
+    var ex=null; try{ex=await publicStore.get('kww-board');}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    list=list.filter(function(item){ return item.id!==postId; });
+    await publicStore.set('kww-board',JSON.stringify(list),true);
+    loadBoard();
+    renderAdminPosts();
+  }catch(e){ showAlert('삭제에 실패했습니다.', {icon:'⚠️', title:'오류'}); }
+}
+
+async function editPost(postId){
+  if(!currentAdmin) return;
+  try{
+    var ex=null; try{ex=await publicStore.get('kww-board');}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    var item=list.find(function(i){ return i.id===postId; });
+    if(!item) return;
+    var newText=await showPrompt('내용을 수정하세요:', item.text, {title:'포스트잇 수정'});
+    if(newText===null) return;
+    if(newText.trim().length<1){ showAlert('내용을 입력해주세요.', {icon:'⚠️', title:'입력 필요'}); return; }
+    item.text=newText.trim();
+    await publicStore.set('kww-board',JSON.stringify(list),true);
+    loadBoard();
+  }catch(e){ showAlert('수정에 실패했습니다.', {icon:'⚠️', title:'오류'}); }
+}
+
+async function loadBoard(){
+  var grid=document.getElementById('postit-grid');
+  if(!grid) return;
+  grid.innerHTML='<div class="postit-loading">LOADING</div>';
+
+  var adminBar=document.getElementById('admin-bar');
+  if(adminBar){
+    if(currentAdmin){
+      adminBar.innerHTML='<span class="admin-chip-id">🔑 '+escHtml(currentAdmin)+'</span>'
+        +' <button onclick="openAdminPanel()" class="admin-chip-view">📊 데이터 보기</button>'
+        +' <button onclick="adminLogout()" class="admin-chip-logout">로그아웃</button>';
+    } else {
+      adminBar.innerHTML='<button onclick="adminLogin()" class="board-tool-btn login">관리자 로그인</button>';
+    }
+  }
+
+  try{
+    var ex=null; try{ex=await publicStore.get('kww-board');}catch(e){}
+    var list=[];
+    if(ex&&ex.value){try{list=JSON.parse(ex.value);}catch(e){}}
+    document.getElementById('board-count').textContent=list.length>0?list.length+'개의 목소리':'';
+    if(list.length===0){grid.innerHTML='<div class="postit-empty">아직 게시된 글이 없어요.<br>첫 번째 목소리를 남겨주세요!</div>';return;}
+    grid.innerHTML='';
+    list.forEach(function(item){
+      var d=new Date(item.ts);
+      var t=pad2(d.getMonth()+1)+'/'+pad2(d.getDate());
+      var el=document.createElement('div');
+      el.className='postit';
+      var nickHtml=item.nick?'<span class="postit-nick">'+escHtml(item.nick)+'</span>':'';
+      var adminBtns='';
+      if(currentAdmin){
+        var pid=item.id||'';
+        adminBtns='<div class="postit-admin-btns">'
+          +'<button onclick=\'editPost('+jsArg(pid)+')\' class="postit-edit-btn">✏</button>'
+          +'<button onclick=\'deletePost('+jsArg(pid)+')\' class="postit-del-btn">🗑</button>'
+          +'</div>';
+      }
+      el.innerHTML=adminBtns+nickHtml+'<span class="postit-text">'+escHtml(item.text)+'</span><span class="postit-time">'+t+'</span>';
+      grid.appendChild(el);
+    });
+  }catch(e){grid.innerHTML='<div class="postit-empty">불러오기 실패</div>';}
+}
+
+function openAdminPanel(){
+  var panel=document.getElementById('admin-data-panel');
+  panel.style.display='block';
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+  showAdminTab('posts');
+}
+
+function escHtml(t){return String(t || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function jsArg(t){return JSON.stringify(String(t || ''));}
+
+/* ═══════════════════════════════════════
+   iOS / Android 모바일 호환성 JS 패치
+═══════════════════════════════════════ */
+
+/* 1. 인트로 슬라이드 좌→우 스와이프로 넘기기 */
+(function(){
+  var wrapper = document.getElementById('intro-wrapper');
+  if(!wrapper) return;
+  var startX = 0, startY = 0;
+  wrapper.addEventListener('touchstart', function(e){
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+  wrapper.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    if(Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return; // 세로 스크롤 무시
+    if(dx < -40) { // 왼쪽으로 스와이프 → 다음
+      var s1 = document.getElementById('slide-1');
+      var s2 = document.getElementById('slide-2');
+      if(s1 && s1.classList.contains('active')) goToSlide2();
+      else if(s2 && s2.classList.contains('active')) goToMain();
+    }
+  }, { passive: true });
+})();
+
+/* 2. iOS 모달 뒤 배경 스크롤 잠금 */
+function lockBodyScroll(){
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.width = '100%';
+}
+function unlockBodyScroll(){
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
+}
+/* 모달 show 시 body 스크롤 잠금 */
+var _origShowAlert = showAlert, _origShowConfirm = showConfirm, _origShowPrompt = showPrompt;
+showAlert = function(){ lockBodyScroll(); return _origShowAlert.apply(this,arguments).then(function(r){ unlockBodyScroll(); return r; }); };
+showConfirm = function(){ lockBodyScroll(); return _origShowConfirm.apply(this,arguments).then(function(r){ unlockBodyScroll(); return r; }); };
+showPrompt = function(){ lockBodyScroll(); return _origShowPrompt.apply(this,arguments).then(function(r){ unlockBodyScroll(); return r; }); };
+
+/* 3. iOS에서 input 포커스 시 화면 밀림(scroll jump) 방지 */
+(function(){
+  var inputs = document.querySelectorAll('input, textarea');
+  inputs.forEach(function(el){
+    el.addEventListener('focus', function(){
+      setTimeout(function(){
+        if(window.scrollY === 0) window.scrollTo(0, 1);
+      }, 300);
+    }, { passive: true });
+  });
+})();
+
+/* 4. Android 뒤로가기(popstate) — 모달 닫기 */
+window.addEventListener('popstate', function(){
+  var modal = document.getElementById('app-modal');
+  var loginModal = document.getElementById('admin-login-modal');
+  if(modal && modal.classList.contains('show')){
+    var cancel = document.getElementById('app-modal-cancel');
+    var ok = document.getElementById('app-modal-ok');
+    if(cancel && cancel.style.display !== 'none' && cancel.onclick) cancel.onclick();
+    else if(ok && ok.onclick) ok.onclick();
+  } else if(loginModal && loginModal.classList.contains('show')){
+    closeAdminLogin();
+  } else if(document.getElementById('nav-drawer') && document.getElementById('nav-drawer').classList.contains('open')){
+    closeMenu();
+  }
+});
+/* 모달 열릴 때 history 쌓기 */
+(function(){
+  var orig = HTMLElement.prototype.classList;
+  var _add = DOMTokenList.prototype.add;
+  DOMTokenList.prototype.add = function(){
+    if(Array.prototype.indexOf.call(arguments,'show') !== -1){
+      var el = this;
+      var targetId = (el && el[Symbol.iterator] ? '' : '');
+    }
+    return _add.apply(this, arguments);
+  };
+})();
+
+/* 5. 터치 스크롤 중 클릭 이벤트 발화 방지 (ghost click) */
+(function(){
+  var touchMoved = false;
+  document.addEventListener('touchmove', function(){ touchMoved = true; }, { passive: true });
+  document.addEventListener('touchstart', function(){ touchMoved = false; }, { passive: true });
+})();
+
+/* 6. 모바일에서 계산 결과 스크롤이 키보드에 가려지지 않도록 */
+(function(){
+  var origDoCalc = doCalc;
+  doCalc = function(){
+    origDoCalc.apply(this, arguments);
+    // 키보드 닫기 후 스크롤
+    if(document.activeElement) document.activeElement.blur();
+    setTimeout(function(){
+      var rboxes = document.getElementById('rboxes');
+      if(rboxes && rboxes.classList.contains('show')){
+        rboxes.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 400);
+  };
+})();
+
+
+/* ── 공유 텍스트 복사 ── */
+function copyShareText(){
+  if(!calcResult) return;
+  var yearly = Math.round(calcResult.yearly).toLocaleString('ko-KR');
+  var monthly = Math.round(calcResult.monthly).toLocaleString('ko-KR');
+  var text =
+    '🔥 성별임금격차로 인해 내가 빼앗긴 돈\n' +
+    '한 달: ' + monthly + '원\n' +
+    '1년: ' + yearly + '원\n\n' +
+    '#여자라서떼인돈 #성별임금격차해소 #생계에성별은없다 #임금투명화실현하라\n' +
+    '→ 직접 계산해보기: ' + location.href;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      showCopied();
+    }).catch(function(){
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+function fallbackCopy(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try{ document.execCommand('copy'); showCopied(); }catch(e){}
+  document.body.removeChild(ta);
+}
+function showCopied(){
+  var msg = document.getElementById('share-copied-msg');
+  if(!msg) return;
+  msg.classList.add('show');
+  setTimeout(function(){ msg.classList.remove('show'); }, 3000);
+}
+
+/* ── 성별임금격차란? 모달 (메뉴에서 호출) ── */
+function openGapInfo(){
+  showAlert(
+    '<strong style="font-size:17px;color:#9d3bf2;">2025년 기준, 한국의 성별임금격차 29%</strong><br><br>' +
+    '한국에서 남성이 100만원을 받을 때 여성은 <strong>71만원</strong>만 받습니다.<br><br>' +
+    'OECD 회원국 중 한국은 <strong>성별임금격차지수 1위</strong>이며, OECD 가입 이래로 단 한 번도 1위를 놓친 적 없습니다.<br><br>' +
+    '한국의 극심한 성별임금격차로 인해 여성노동자들은 매일 <strong>오후 3시부터</strong> 사실상 임금 없이 일하는 셈입니다.<br><br>' +
+    '본 캠페인은 여성노동자들이 빼앗긴 돈을 눈에 보이게끔 만들어 <strong>성별임금격차 해소</strong>를 요구하고자 합니다.',
+    { icon: '⚡', title: '성별임금격차란?' }
+  );
+}
+function showMainIfNeeded(){
+  var iw = document.getElementById('intro-wrapper');
+  if(iw && iw.style.display !== 'none'){
+    // 인트로에서 슬라이드2로 이동
+    goToSlide2();
+  } else {
+    openGapInfo();
+  }
+}
+
+
+/* ── 첫 페이지(슬라이드1)로 돌아가기 ── */
+function goToIntro(){
+  var ms = document.getElementById('main-site');
+  var iw = document.getElementById('intro-wrapper');
+  if(ms) ms.classList.remove('show');
+  if(iw){
+    iw.style.display = '';
+    // 슬라이드1 활성화
+    var s1 = document.getElementById('slide-1');
+    var s2 = document.getElementById('slide-2');
+    if(s1) s1.classList.add('active');
+    if(s2) s2.classList.remove('active');
+  }
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+
+/* ── 이미지 저장 ── */
+function saveResultImage(){
+  if(!calcResult) return;
+  var btn = document.querySelector('.share-img-btn');
+  if(btn){ btn.textContent = '⏳ 이미지 생성 중...'; btn.disabled = true; }
+
+  var mEl = document.getElementById('img-r-m');
+  var yEl = document.getElementById('img-r-y');
+  if(mEl) mEl.textContent = Math.round(calcResult.monthly).toLocaleString('ko-KR') + '원';
+  if(yEl) yEl.textContent = Math.round(calcResult.yearly).toLocaleString('ko-KR') + '원';
+
+  var card = document.getElementById('result-img-card');
+
+  var CARD_W = 540; // 카드 너비
+  html2canvas(card, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#1a0a2e',
+    logging: false,
+    width: CARD_W,
+    windowWidth: CARD_W,
+    scrollX: 0,
+    scrollY: 0,
+    x: 0,
+    y: 0
+  }).then(function(canvas){
+    // 인스타그램 1:1 정사각형 캔버스에 중앙 배치
+    var side = Math.max(canvas.width, canvas.height);
+    var sq = document.createElement('canvas');
+    sq.width = side; sq.height = side;
+    var ctx = sq.getContext('2d');
+    ctx.fillStyle = '#1a0a2e';
+    ctx.fillRect(0, 0, side, side);
+    var ox = Math.round((side - canvas.width) / 2);
+    var oy = Math.round((side - canvas.height) / 2);
+    ctx.drawImage(canvas, ox, oy);
+    var dataUrl = sq.toDataURL('image/png');
+    var previewImg = document.getElementById('img-preview-src');
+    if(previewImg) previewImg.src = dataUrl;
+    var modal = document.getElementById('img-preview-modal');
+    if(modal){ modal.classList.add('show'); lockBodyScroll(); }
+    if(btn){ btn.textContent = '🖼️ 이미지로 저장하기'; btn.disabled = false; }
+  }).catch(function(err){
+    console.error(err);
+    if(btn){ btn.textContent = '🖼️ 이미지로 저장하기'; btn.disabled = false; }
+    showAlert('이미지 생성에 실패했습니다. 다시 시도해주세요.', {icon:'⚠️', title:'오류'});
+  });
+}
+function closeImgModal(){
+  var modal = document.getElementById('img-preview-modal');
+  if(modal) modal.classList.remove('show');
+  unlockBodyScroll();
+}
+function imgModalBackdrop(e){
+  if(e.target && e.target.id === 'img-preview-modal') closeImgModal();
+}
+
+</script>
+
+<!-- 이미지 저장용 숨김 카드 — 인스타그램 1:1 정사각형 맞춤 -->
+<div id="result-img-card" style="
+  position:fixed; left:-9999px; top:0;
+  width:540px;
+  font-family:'Noto Sans KR',sans-serif;
+  background:#1a0a2e;
+  padding:28px 28px 24px;
+  box-sizing:border-box;
+">
+  <!-- 내부 흰 카드 -->
+  <div style="background:#fff; border:3px solid #1a0a2e; border-radius:4px; overflow:hidden;">
+
+    <!-- 헤더 -->
+    <div style="background:#1a0a2e; padding:26px 28px 22px; text-align:center; border-bottom:4px solid #9d3bf2;">
+      <div style="font-size:28px; margin-bottom:6px;">💸</div>
+      <div style="font-size:13px; color:#c98af7; font-weight:700; letter-spacing:.12em; margin-bottom:8px;">성별임금격차로 인해</div>
+      <div style="font-size:34px; font-weight:900; color:#fff; line-height:1.2; letter-spacing:-.02em;">내가 빼앗긴 돈</div>
+    </div>
+
+    <!-- 굵은 구분선 -->
+    <div style="height:10px; background:#1a0a2e;"></div>
+
+    <!-- 한 달 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:20px 28px; border-bottom:2px dashed #bbb; background:#fff;">
+      <span style="font-size:20px; font-weight:900; color:#1a0a2e;">💰 한 달 빼앗긴 돈</span>
+      <span id="img-r-m" style="font-size:24px; font-weight:900; color:#9d3bf2; letter-spacing:-.01em;">—</span>
+    </div>
+
+    <!-- 굵은 구분선 -->
+    <div style="height:7px; background:#1a0a2e;"></div>
+
+    <!-- 1년 누적 강조 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:24px 28px; border-bottom:2px dashed #bbb; background:#f0e4ff;">
+      <span style="font-size:22px; font-weight:900; color:#1a0a2e;">🔥 1년 누적 빼앗긴 돈</span>
+      <span id="img-r-y" style="font-size:30px; font-weight:900; color:#7a1fd4; letter-spacing:-.01em;">—</span>
+    </div>
+
+    <!-- 굵은 구분선 -->
+    <div style="height:10px; background:#1a0a2e;"></div>
+
+    <!-- 성별임금격차 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:18px 28px; border-bottom:2px dashed #bbb;">
+      <span style="font-size:17px; font-weight:700; color:#1a0a2e;">⚡ 한국 성별임금격차</span>
+      <span style="font-size:24px; font-weight:900; color:#e74c3c;">29%</span>
+    </div>
+
+    <!-- OECD -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:18px 28px; border-bottom:2px dashed #bbb;">
+      <span style="font-size:15px; font-weight:700; color:#1a0a2e;">🌍 OECD 성별임금격차</span>
+      <span style="font-size:17px; font-weight:900; color:#e74c3c;">29년째 1위 💢</span>
+    </div>
+
+    <!-- 오후 3시 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:18px 28px; border-bottom:2px dashed #bbb;">
+      <span style="font-size:15px; font-weight:700; color:#1a0a2e;">🕒 공짜 노동 시작 시각</span>
+      <span style="font-size:17px; font-weight:900; color:#9d3bf2;">매일 오후 3시부터</span>
+    </div>
+
+    <!-- 굵은 구분선 -->
+    <div style="height:10px; background:#1a0a2e;"></div>
+
+    <!-- 해시태그 1행 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 28px; border-bottom:2px dashed #bbb;">
+      <span style="font-size:14px; font-weight:700; color:#1a0a2e;">📢 #여자라서떼인돈</span>
+      <span style="font-size:14px; font-weight:900; color:#9d3bf2;">#성별임금격차해소</span>
+    </div>
+    <!-- 해시태그 2행 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 28px; border-bottom:2px dashed #bbb;">
+      <span style="font-size:14px; font-weight:700; color:#1a0a2e;">✊ #생계에성별은없다</span>
+      <span style="font-size:14px; font-weight:900; color:#9d3bf2;">#임금투명화실현하라</span>
+    </div>
+
+    <!-- 굵은 구분선 -->
+    <div style="height:10px; background:#1a0a2e;"></div>
+
+    <!-- 푸터 -->
+    <div style="padding:18px 28px; text-align:center; background:#1a0a2e;">
+      <div style="font-size:14px; font-weight:900; color:#c98af7; letter-spacing:.02em;">🚩 한국여성노동자회 × 전국여성노동조합</div>
+    </div>
+
+  </div><!-- /내부 흰 카드 -->
+</div>
+
+
+<!-- 이미지 미리보기 팝업 -->
+<div id="img-preview-modal" class="img-preview-modal" onclick="imgModalBackdrop(event)">
+  <div class="img-preview-modal-box">
+    <div class="img-preview-header">
+      <span class="img-preview-title">📸 결과 이미지 미리보기</span>
+      <button class="img-preview-close" onclick="closeImgModal()">×</button>
+    </div>
+    <div class="img-preview-img-wrap">
+      <img id="img-preview-src" src="" alt="결과 이미지">
+    </div>
+    <div class="img-preview-guide">
+      📱 이미지를 꾹 누르면 저장할 수 있어요!
+      <span>안드로이드·아이폰 모두 길게 누르기 → '이미지 저장' 선택</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
