@@ -2046,64 +2046,69 @@ function goToSection(sectionId){
    window.storage가 없는 일반 배포 환경(Vercel/GitHub Pages 등)에서도
    로그인 없이 제출이 되도록 localStorage로 자동 대체합니다.
    window.storage가 있는 환경에서는 기존 공용 저장소를 그대로 사용합니다. */
-/* ── 공용 스토리지: BIN ID 고정 → 모든 기기에서 하나로 집계 ── */
+/* ── 공용 스토리지: JSONBin 고정 BIN — 모든 기기 합산 ── */
 var JSONBIN_KEY = '$2a$10$xgs2TfXR2pjg0p68cSGKAuQUwe7fd59GK3Hkzy5jMRT59kgHKxa4m';
-var JSONBIN_BIN_ID = '6a0579d8adc21f119a9a8826'; // 고정 BIN ID
+var JSONBIN_BIN_ID = '6a0579d8adc21f119a9a8826';
+var JSONBIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
+var _binCache = null; // 메모리 캐시 (중복 GET 방지)
+
+async function _binGet(){
+  // Claude Artifacts 환경
+  if(window.storage && typeof window.storage.get === 'function'){
+    var r = await window.storage.get('kww-all', true);
+    try { return r && r.value ? JSON.parse(r.value) : {}; } catch(e){ return {}; }
+  }
+  // JSONBin
+  var res = await fetch(JSONBIN_URL + '/latest', {
+    headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
+  });
+  if(!res.ok) throw new Error('GET 실패 ' + res.status);
+  var data = await res.json();
+  return data.record || data || {};
+}
+
+async function _binSet(obj){
+  // Claude Artifacts 환경
+  if(window.storage && typeof window.storage.set === 'function'){
+    await window.storage.set('kww-all', JSON.stringify(obj), true);
+    return;
+  }
+  // JSONBin
+  var res = await fetch(JSONBIN_URL, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': JSONBIN_KEY
+    },
+    body: JSON.stringify(obj)
+  });
+  if(!res.ok) throw new Error('PUT 실패 ' + res.status);
+}
 
 var publicStore = {
   async get(key){
-    // 1순위: Claude Artifacts 공용 스토리지
-    if(window.storage && typeof window.storage.get === 'function'){
-      return await window.storage.get(key, true);
-    }
-    // 2순위: JSONBin.io 고정 BIN (모든 기기 공유)
     try {
-      var res = await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID + '/latest', {
-        headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
-      });
-      if(!res.ok) throw new Error('fetch fail');
-      var data = await res.json();
-      var record = data.record || data;
-      var val = record[key];
-      if(val === undefined) return null;
+      var obj = await _binGet();
+      var val = obj[key];
+      if(val === undefined || val === null) return null;
       return { value: typeof val === 'string' ? val : JSON.stringify(val) };
     } catch(e) {
-      // fallback: localStorage
+      console.warn('publicStore.get 실패, localStorage 사용:', e);
       var v = localStorage.getItem(key);
       return v === null ? null : { value: v };
     }
   },
   async set(key, value, isPublic){
-    // 1순위: Claude Artifacts
-    if(window.storage && typeof window.storage.set === 'function'){
-      return await window.storage.set(key, value, true);
-    }
-    // 2순위: JSONBin.io 고정 BIN 업데이트
     try {
       var parsed;
       try { parsed = JSON.parse(value); } catch(e){ parsed = value; }
-      // 현재 데이터 읽기
-      var getRes = await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID + '/latest', {
-        headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
-      });
-      var existing = {};
-      if(getRes.ok){
-        var gd = await getRes.json();
-        existing = gd.record || gd || {};
-      }
-      existing[key] = parsed;
-      // 저장
-      await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': JSONBIN_KEY
-        },
-        body: JSON.stringify(existing)
-      });
+      var obj = {};
+      try { obj = await _binGet(); } catch(e){ obj = {}; }
+      obj[key] = parsed;
+      await _binSet(obj);
       return { ok: true };
     } catch(e) {
-      // fallback: localStorage
+      console.warn('publicStore.set 실패, localStorage 사용:', e);
       localStorage.setItem(key, value);
       return { ok: true };
     }
