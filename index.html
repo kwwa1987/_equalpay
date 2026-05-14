@@ -2046,69 +2046,45 @@ function goToSection(sectionId){
    window.storage가 없는 일반 배포 환경(Vercel/GitHub Pages 등)에서도
    로그인 없이 제출이 되도록 localStorage로 자동 대체합니다.
    window.storage가 있는 환경에서는 기존 공용 저장소를 그대로 사용합니다. */
-/* ── 공용 스토리지: JSONBin 고정 BIN — 모든 기기 합산 ── */
-var JSONBIN_KEY = '$2a$10$xgs2TfXR2pjg0p68cSGKAuQUwe7fd59GK3Hkzy5jMRT59kgHKxa4m';
-var JSONBIN_BIN_ID = '6a0579d8adc21f119a9a8826';
-var JSONBIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
-var _binCache = null; // 메모리 캐시 (중복 GET 방지)
-
-async function _binGet(){
-  // Claude Artifacts 환경
-  if(window.storage && typeof window.storage.get === 'function'){
-    var r = await window.storage.get('kww-all', true);
-    try { return r && r.value ? JSON.parse(r.value) : {}; } catch(e){ return {}; }
-  }
-  // JSONBin
-  var res = await fetch(JSONBIN_URL + '/latest', {
-    headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Meta': 'false' }
-  });
-  if(!res.ok) throw new Error('GET 실패 ' + res.status);
-  var data = await res.json();
-  return data.record || data || {};
-}
-
-async function _binSet(obj){
-  // Claude Artifacts 환경
-  if(window.storage && typeof window.storage.set === 'function'){
-    await window.storage.set('kww-all', JSON.stringify(obj), true);
-    return;
-  }
-  // JSONBin
-  var res = await fetch(JSONBIN_URL, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Master-Key': JSONBIN_KEY
-    },
-    body: JSON.stringify(obj)
-  });
-  if(!res.ok) throw new Error('PUT 실패 ' + res.status);
-}
+/* ── 공용 스토리지: Google Apps Script — 모든 기기 합산 ── */
+var GAS_URL = 'https://script.google.com/macros/s/AKfycby36h2_wkzlMwYRoxEcMcxFiVakJwKUa-QcPb-HlQxCljhzZXMWe3dt-O5r3b9TIgfbIg/exec';
 
 var publicStore = {
   async get(key){
+    // Claude Artifacts 환경
+    if(window.storage && typeof window.storage.get === 'function'){
+      return await window.storage.get(key, true);
+    }
+    // Google Apps Script
     try {
-      var obj = await _binGet();
-      var val = obj[key];
-      if(val === undefined || val === null) return null;
-      return { value: typeof val === 'string' ? val : JSON.stringify(val) };
+      var res = await fetch(GAS_URL + '?key=' + encodeURIComponent(key));
+      if(!res.ok) throw new Error('GET 실패');
+      var data = await res.json();
+      return { value: JSON.stringify(data) };
     } catch(e) {
-      console.warn('publicStore.get 실패, localStorage 사용:', e);
+      console.warn('GET 실패, localStorage 사용:', e);
       var v = localStorage.getItem(key);
       return v === null ? null : { value: v };
     }
   },
   async set(key, value, isPublic){
+    // Claude Artifacts 환경
+    if(window.storage && typeof window.storage.set === 'function'){
+      return await window.storage.set(key, value, true);
+    }
+    // Google Apps Script
     try {
       var parsed;
       try { parsed = JSON.parse(value); } catch(e){ parsed = value; }
-      var obj = {};
-      try { obj = await _binGet(); } catch(e){ obj = {}; }
-      obj[key] = parsed;
-      await _binSet(obj);
+      var res = await fetch(GAS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ key: key, value: parsed })
+      });
+      if(!res.ok) throw new Error('POST 실패');
       return { ok: true };
     } catch(e) {
-      console.warn('publicStore.set 실패, localStorage 사용:', e);
+      console.warn('POST 실패, localStorage 사용:', e);
       localStorage.setItem(key, value);
       return { ok: true };
     }
