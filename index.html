@@ -2046,8 +2046,9 @@ function goToSection(sectionId){
    window.storage가 없는 일반 배포 환경(Vercel/GitHub Pages 등)에서도
    로그인 없이 제출이 되도록 localStorage로 자동 대체합니다.
    window.storage가 있는 환경에서는 기존 공용 저장소를 그대로 사용합니다. */
-/* ── 공용 스토리지: Google Apps Script — 모든 기기 합산 ── */
-var GAS_URL = 'https://script.google.com/macros/s/AKfycby36h2_wkzlMwYRoxEcMcxFiVakJwKUa-QcPb-HlQxCljhzZXMWe3dt-O5r3b9TIgfbIg/exec';
+/* ── 공용 스토리지: Firebase Realtime Database — 모든 기기 합산 ── */
+var FIREBASE_URL = 'https://kww-campaign-default-rtdb.firebaseio.com';
+var _fbCache = {}; // 메모리 캐시
 
 var publicStore = {
   async get(key){
@@ -2055,14 +2056,20 @@ var publicStore = {
     if(window.storage && typeof window.storage.get === 'function'){
       return await window.storage.get(key, true);
     }
-    // Google Apps Script
+    // 캐시 있으면 즉시 반환
+    if(_fbCache[key] !== undefined){
+      return { value: JSON.stringify(_fbCache[key]) };
+    }
+    // Firebase에서 가져오기
     try {
-      var res = await fetch(GAS_URL + '?key=' + encodeURIComponent(key));
+      var res = await fetch(FIREBASE_URL + '/' + key + '.json', { cache: 'no-store' });
       if(!res.ok) throw new Error('GET 실패');
       var data = await res.json();
+      if(data === null) return null;
+      _fbCache[key] = data;
       return { value: JSON.stringify(data) };
     } catch(e) {
-      console.warn('GET 실패, localStorage 사용:', e);
+      console.warn('Firebase GET 실패, localStorage 사용:', e);
       var v = localStorage.getItem(key);
       return v === null ? null : { value: v };
     }
@@ -2072,22 +2079,18 @@ var publicStore = {
     if(window.storage && typeof window.storage.set === 'function'){
       return await window.storage.set(key, value, true);
     }
-    // Google Apps Script
-    try {
-      var parsed;
-      try { parsed = JSON.parse(value); } catch(e){ parsed = value; }
-      var res = await fetch(GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ key: key, value: parsed })
-      });
-      if(!res.ok) throw new Error('POST 실패');
-      return { ok: true };
-    } catch(e) {
-      console.warn('POST 실패, localStorage 사용:', e);
-      localStorage.setItem(key, value);
-      return { ok: true };
-    }
+    var parsed;
+    try { parsed = JSON.parse(value); } catch(e){ parsed = value; }
+    // 낙관적 업데이트: 캐시 즉시 갱신 → UI 즉시 반응
+    _fbCache[key] = parsed;
+    localStorage.setItem(key, value);
+    // 백그라운드로 Firebase에 저장
+    fetch(FIREBASE_URL + '/' + key + '.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(parsed)
+    }).catch(function(e){ console.warn('Firebase 저장 실패:', e); });
+    return { ok: true };
   }
 };
 
